@@ -7,10 +7,12 @@ using namespace experimental;
 namespace ph::concepts{
 
 template <class T, class U>
-concept convertible = std::is_convertible_v<T, U>;
+concept convertible = std::is_convertible_v <T, U>;
 
 template <class T, class U>
-concept same = std::is_same_v<T, U>;
+concept same = std::is_same_v <T, U>;
+
+
 
 
 
@@ -30,6 +32,14 @@ concept coroutine = requires (typename T::promise_type promise) {
 template <typename T>
 concept awaitable = requires (T const t) {
     {t.await_ready()} noexcept -> same <bool>;
+    {t.await_suspend()} noexcept -> same <void>;
+    {t.await_resume()} noexcept -> same <void>;
+};
+
+template <typename T>
+concept fast_awaitable = requires (T const t) {
+    {t.await_ready()} noexcept -> same <bool>;
+    t.await_ready() == true;
     {t.await_suspend()} noexcept -> same <void>;
     {t.await_resume()} noexcept -> same <void>;
 };
