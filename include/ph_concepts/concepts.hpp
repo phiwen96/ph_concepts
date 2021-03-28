@@ -53,7 +53,7 @@ concept coroutine = move_constructible <T> and not copy_constructible <T> and re
 
 
 template <typename T>
-concept awaitable = requires (T const t) {
+concept coroutine_awaitable = requires (T t) {
     {t.await_ready()} noexcept -> same <bool>;
     {t.await_suspend()} noexcept -> same <void>;
     {t.await_resume()} noexcept -> same <void>;
