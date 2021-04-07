@@ -30,7 +30,11 @@ concept move_assignable = requires (T& t1, T&& t2) {
     t1 = (T&&) t2;
 };
 
-
+template <class A, class B>
+concept assignable = requires (A& a, B& b)
+{
+    a = b;
+};
 
 
 
@@ -124,7 +128,7 @@ template <typename T>
 concept transform_type = requires (T t)
 {
     {t.await_ready ()} -> same <bool>;
-    {t.await_suspend (coroutine_handle<>{})} -> convertible <coroutine_handle <>>;
+    {t.await_suspend (declval<coroutine_handle<>>())} -> convertible <coroutine_handle <typename T::promise_type>>;
     {t.await_resume ()};
 };
 }
