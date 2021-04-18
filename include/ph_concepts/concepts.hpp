@@ -6,7 +6,7 @@ using namespace experimental;
 
  
 
-namespace ph::concepts{
+namespace ph::concepts {
 
 template <class T, class U>
 concept convertible = is_convertible_v <T, U>;
@@ -36,8 +36,20 @@ concept assignable = requires (A& a, B& b)
     a = b;
 };
 
+template <typename T>
+concept value_type = requires {
+    typename T::value_type;
+};
 
+template <typename T>
+concept type = requires {
+    typename T::type;
+};
 
+template <typename T>
+concept value = requires {
+    T::value;
+};
 
 
 //template <typename T>
