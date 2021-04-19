@@ -1,15 +1,15 @@
 #pragma once
-using namespace std;
+//using namespace std;
 #include <experimental/coroutine>
-using namespace experimental;
+using namespace std::experimental;
 
 
  
 
-namespace ph::concepts {
+namespace ph::concepts{
 
 template <class T, class U>
-concept convertible = is_convertible_v <T, U>;
+concept convertible = std::is_convertible_v <T, U>;
 
 template <class T, class U>
 concept same = std::is_same_v <T, U>;
@@ -36,20 +36,8 @@ concept assignable = requires (A& a, B& b)
     a = b;
 };
 
-template <typename T>
-concept value_type = requires {
-    typename T::value_type;
-};
 
-template <typename T>
-concept type = requires {
-    typename T::type;
-};
 
-template <typename T>
-concept value = requires {
-    T::value;
-};
 
 
 //template <typename T>
@@ -98,7 +86,7 @@ static_assert(same <int, double> == false, "");
 static_assert(same <int, int> == true, "");
 static_assert(convertible <int, double> == true, "");
 static_assert(convertible <double, int> == true, "");
-static_assert(convertible <int, string> == false, "");
+static_assert(convertible <int, std::string> == false, "");
 
 
 
@@ -140,7 +128,7 @@ template <typename T>
 concept transform_type = requires (T t)
 {
     {t.await_ready ()} -> same <bool>;
-    {t.await_suspend (declval<coroutine_handle<>>())} -> convertible <coroutine_handle <typename T::promise_type>>;
+    {t.await_suspend (std::declval<coroutine_handle<>>())} -> convertible <coroutine_handle <typename T::promise_type>>;
     {t.await_resume ()};
 };
 }
@@ -166,3 +154,4 @@ concept interface_type = requires (interface i)
 
 
 } // ph::concepts
+
