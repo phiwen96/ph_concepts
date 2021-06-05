@@ -1,6 +1,6 @@
 //#include "testlib.hpp"
 
-
+#define RUN_CATCH
 #if defined (RUN_CATCH)
 
 #define CATCH_CONFIG_RUNNER
@@ -20,9 +20,7 @@ auto main (int argc, char* argv[]) -> int
 //#include <algorithms/timer.hpp>
 //#include <algorithms/common.hpp>//#include "test.hpp"
 
-cexp int loops = 10000000;
 
-cexp int elements = 10;
 
 auto main (int argc, char* argv[]) -> int
 {

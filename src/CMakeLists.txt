@@ -32,5 +32,5 @@ target_include_directories(ph_concepts PUBLIC
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 else()
-    set_target_properties(${PROJECT_NAME}          PROPERTIES FOLDER "dependencies/${PROJECT_NAME}")
+    set_target_properties(${PROJECT_NAME}          PROPERTIES FOLDER "dependencies")
 endif()
