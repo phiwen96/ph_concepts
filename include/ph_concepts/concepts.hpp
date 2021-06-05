@@ -27,6 +27,12 @@ concept convertible_to = requires (){
 template <typename T>
 concept Copy_constructible = std::is_copy_constructible_v <T>;
 
+
+//struct copy_constructible
+//{
+//
+//};
+
 template <typename T>
 concept Copy_assignable = std::is_copy_assignable_v <T>;
 

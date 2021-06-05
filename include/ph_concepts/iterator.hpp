@@ -13,32 +13,32 @@ concept Iterator =
     Incrementable <T>;
 
 template <typename T>
-concept Input_iterator = Iterator <T> and requires ()
+concept Iterator_Input = Iterator <T> and requires ()
 {
     true;
 };
 
 
 template <typename T>
-concept Output_iterator = requires ()
+concept Iterator_Output = Iterator <T> and requires ()
 {
     true;
 };
 
 template <typename T>
-concept Forward_iterator = requires ()
+concept Iterator_Forward = Iterator <T> and requires ()
 {
     true;
 };
 
 template <typename T>
-concept Bidirectional_iterator = requires ()
+concept Iterator_Bidirectional = Iterator <T> and requires ()
 {
     true;
 };
 
 template <typename T>
-concept Random_access_iterator = requires ()
+concept Iterator_Random_access = Iterator <T> and requires ()
 {
     true;
 };
