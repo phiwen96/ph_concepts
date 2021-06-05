@@ -2,7 +2,11 @@
 
 #include "concepts.hpp"
 
-
+template <typename T>
+concept Iterator = requires ()
+{
+    <#true;#>
+};
 
 template <typename T>
 concept Input_iterator = requires ()

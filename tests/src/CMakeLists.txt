@@ -35,7 +35,7 @@ ph_add_test (concepts)
 # target_include_directories (test_${PROJECT_NAME}_sequence PRIVATE include ph::color)
 # ph_precompile (TARGET test_${PROJECT_NAME}_sequence PRIVATE PCH ${std_pch})
 
-add_test (NAME testtest_${PROJECT_NAME} COMMAND ${self}) 
+# add_test (NAME testtest_${PROJECT_NAME} COMMAND ${self}) 
 
 
 # if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
