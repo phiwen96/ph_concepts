@@ -7,7 +7,14 @@ add_library (ph_concepts
 	${SOURCE_LIST}  ${HEADER_LIST} 
 )
 
+set (self ${PROJECT_NAME})
 
+file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.asm)
+foreach (file ${CONFIGS})
+	get_filename_component (name ${file} NAME)
+	# message ("hej ${file}")
+	configure_file (${file} ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/${name} @ONLY)
+endforeach ()
 
 ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch} ${boost_pch})
 

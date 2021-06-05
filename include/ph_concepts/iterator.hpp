@@ -1,6 +1,9 @@
 #pragma once
 
 #include "concepts.hpp"
+//#include "platform.asm"
+//#include "ph_concepts/platform.asm"
+//#include <ph_concepts/platform.asm>
 
 template <typename T>
 concept Iterator = Pointer <T> or requires (T& t)
@@ -39,11 +42,7 @@ concept Random_access_iterator = requires ()
     true;
 };
 
-template <typename T>
-concept Iterator = Pointer <T> or requires (T& t)
-{
-    t++;*t;
-};
+
 
 
 
