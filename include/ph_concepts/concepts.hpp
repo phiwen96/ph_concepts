@@ -22,6 +22,36 @@ concept convertible_to = requires (){
     requires std::is_convertible_v <A, B>;
 };
 
+
+
+template <typename T>
+concept Copy_constructible = std::is_copy_constructible_v <T>;
+
+template <typename T>
+concept Copy_assignable = std::is_copy_assignable_v <T>;
+
+template <typename T>
+concept Destructible = std::is_destructible_v <T>;
+
+template <typename T>
+concept Incrementable = requires (T& t)
+{
+    t++;
+    ++t;
+};
+
+
+
+
+template <typename T>
+concept Dereferenceable = requires (T& t)
+{
+    *t;
+};
+
+
+
+
 template <typename T>
 concept Pointer = requires (T& t)
 {

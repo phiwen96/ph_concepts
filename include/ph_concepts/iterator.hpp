@@ -6,13 +6,14 @@
 //#include <ph_concepts/platform.asm>
 
 template <typename T>
-concept Iterator = Pointer <T> or requires (T& t)
-{
-    t++;++t;*t;
-};
+concept Iterator =
+    Copy_constructible <T> and
+    Copy_assignable <T> and
+    Destructible <T> and
+    Incrementable <T>;
 
 template <typename T>
-concept Input_iterator = requires ()
+concept Input_iterator = Iterator <T> and requires ()
 {
     true;
 };
