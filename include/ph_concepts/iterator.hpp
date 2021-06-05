@@ -3,9 +3,9 @@
 #include "concepts.hpp"
 
 template <typename T>
-concept Iterator = requires ()
+concept Iterator = Pointer <T> or requires (T& t)
 {
-    <#true;#>
+    t++;++t;*t;
 };
 
 template <typename T>
