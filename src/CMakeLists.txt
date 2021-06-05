@@ -9,7 +9,7 @@ add_library (ph_concepts
 
 set (self ${PROJECT_NAME})
 
-file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.asm)
+file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.hpp)
 foreach (file ${CONFIGS})
 	get_filename_component (name ${file} NAME)
 	# message ("hej ${file}")
