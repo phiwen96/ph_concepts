@@ -7,6 +7,7 @@ add_library (ph_concepts
 	${SOURCE_LIST}  ${HEADER_LIST} 
 )
 
+target_sources (ph_concepts PRIVATE in/platform.hpp)
 set (self ${PROJECT_NAME})
 
 file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.hpp)
