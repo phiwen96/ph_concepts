@@ -28,45 +28,21 @@ concept Pointer = requires (T& t)
     requires (std::is_pointer_v <T>);
 };
 
-template <typename T>
-concept Iterator = requires (T& t)
-{
-    {++t} -> same_as <T&>;
-    {t++} -> same_as <T&>;
-    {--t} -> same_as <T&>;
-    {t--} -> same_as <T&>;
-    
-    requires requires ()
-    {
-        {*t} -> same_as <typename T::reference>;
-        
-    } or requires ()
-    {
-        {*t} -> same_as <typename T::value_type>;
-    };
-};
-
 
 
 template <typename T>
-concept Iterable = requires (T& t)
+concept Fundamental = std::is_fundamental_v <T>;
+
+template <typename T>
+concept Class = std::is_class_v <T>;
+
+
+template <typename T>
+concept Object = Fundamental <T> or Class <T> or requires ()
 {
-    requires requires ()
-    {
-        {t.begin ()} -> Iterator;
-        {t.end ()} -> Iterator;
-        
-    } or requires ()
-    {
-        {t.begin ()} -> Pointer;
-        {t.end ()} -> Pointer;
-        
-    } or requires (size_t& i)
-    {
-        t [i];
-        {t.size ()} -> convertible_to <size_t>;
-    };
+    requires (false);
 };
+
 
 
 
@@ -86,6 +62,9 @@ concept String = requires (T& str)
     
     
 };
+
+
+
 
 
 

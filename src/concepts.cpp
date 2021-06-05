@@ -21,7 +21,7 @@ struct iter
 
 
 
-static_assert (Iterator <iter>, "");
+//static_assert (Iterator <iter>, "");
 
 
 
