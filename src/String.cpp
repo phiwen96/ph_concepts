@@ -1,5 +1,5 @@
 #include "String.hpp"
-
+namespace concepts{
 
 struct string
 {
@@ -13,3 +13,4 @@ struct string
 static_assert (String <string>, "");
 static_assert (String <std::string>, "");
 static_assert (String <std::vector <char>>, "");
+}

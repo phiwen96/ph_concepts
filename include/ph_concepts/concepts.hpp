@@ -1,15 +1,10 @@
 #pragma once
+#include <map>
+#include <unordered_map>
 //using namespace std;
-
 
 template <typename T, typename... U>
 concept same_as_any_of = (std::is_same_v <T, U> or ...);
-
-
-
-
-template <char c>
-concept is_digit = requires {requires (c >= '0' and c <= '9');};
 
 template <typename A, typename B>
 concept same_as = requires (){
@@ -21,6 +16,40 @@ template <typename A, typename B>
 concept convertible_to = requires (){
     requires std::is_convertible_v <A, B>;
 };
+
+template <typename T>
+concept Unsigned = std::is_unsigned_v <T>;
+
+template <typename T>
+concept Signed = not Unsigned <T>;
+
+
+
+
+
+
+template <typename T>
+concept Type_information = requires () {
+    /// Type traits that return information about a type as a boolean or an integer value.
+    {T::value} -> same_as <bool>;
+//    {typename T::value_type} -> same_as <int>;
+};
+
+
+
+template <typename T>
+concept Type_transformation = requires () {
+    /// Type traits that return a new type
+    {T::value} -> same_as <bool>;
+//    {typename T::value_type} -> same_as <int>;
+};
+
+
+
+template <char c>
+concept is_digit = requires {requires (c >= '0' and c <= '9');};
+
+
 
 
 
@@ -98,10 +127,39 @@ concept Dereferenceable = requires (T& t1, T& t2)
     {reinterpret_cast <T&> (*t1)} -> Reference;
 };
 
+template<typename T>
+concept Map =
+    std::same_as<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
+    std::same_as<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
 
 
 
 
+
+template <template <typename...> class Template, typename Class>
+struct is_instantiation : std::false_type {};
+
+template <template <typename...> class Template, typename... Args>
+struct is_instantiation <Template, Template <Args...>> : std::true_type {};
+
+template <typename Class, template <typename...> class Template>
+concept is_instantiation_of = is_instantiation <Template, Class>::value;
+
+template <typename T>
+concept map_type =
+    is_instantiation_of<T, std::map> || is_instantiation_of<T, std::unordered_map>;
+
+
+auto map_copy (map_type auto const& a) -> map_type auto
+{
+    return a;
+}
+
+template <is_instantiation_of <std::map> T>
+auto ordered_map_copy (T const& a) -> T
+{
+    return a;
+}
 
 
 

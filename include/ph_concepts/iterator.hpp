@@ -5,6 +5,8 @@
 //#include "ph_concepts/platform.asm"
 //#include <ph_concepts/platform.asm>
 
+namespace concepts{
+
 template <typename T>
 concept Iterator = requires (T& a, T& b)
 {
@@ -115,3 +117,5 @@ concept Iterable = requires (T& t)
         {t.size ()} -> convertible_to <size_t>;
     };
 };
+
+}
