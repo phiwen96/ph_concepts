@@ -26,6 +26,8 @@ target_include_directories (ph_concepts PRIVATE ${Boost_INCLUDE_DIRS})
 
 target_compile_features (ph_concepts PUBLIC cxx_std_20)
 
+target_compile_options(ph_concepts PUBLIC "-ast-dump  -fsyntax-only")
+
 
 target_include_directories(ph_concepts PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ph_concepts>

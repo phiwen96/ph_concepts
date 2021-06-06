@@ -1,38 +1,110 @@
 #include "concepts.hpp"
-
-static_assert (same_as_any_of <int, double, float, int>, "");
-static_assert (not same_as_any_of <int, double, float, std::string>, "");
-//static_assert (Iterable <std::vector <int>>, "");
+#include "common.hpp"
 
 
-struct iter
+
+
+
+#define Self default_constructible
+struct Self
 {
-    using reference = int&;
-    using value_type = int;
-    int i;
-    int* begin(){return &i;}
-    int* end(){return &i;}
-    auto& operator++(){return *this;}
-    auto& operator++(int){return *this;}
-    auto& operator--(){return *this;}
-    auto& operator--(int){return *this;}
-    auto operator*(){return i;}
+    Self ();
+    Self (Self &&) = delete;
+    Self (Self const&) = delete;
+    Self& operator= (Self &&) = delete;
+    Self& operator= (Self const&) = delete;
 };
+static_assert (Default_constructible <Self>, "");
+static_assert (not Copy_constructible <Self>, "");
+static_assert (not Move_constructible <Self>, "");
+static_assert (not Copy_assignable <Self>, "");
+static_assert (not Move_assignable <Self>, "");
+#undef Self
 
 
 
-//static_assert (Iterator <iter>, "");
 
 
-struct A
+
+#define Self copy_constructible
+struct Self
 {
-    int i;
-    A &  operator*();
-    A& operator= (A const&) = delete;
-//    A& operator= (A&&){}
+    Self () = delete;
+    Self (Self &&) = delete;
+    Self (Self const&);
+    Self& operator= (Self &&) = delete;
+    Self& operator= (Self const&) = delete;
 };
+static_assert (not Default_constructible <Self>, "");
+static_assert (Copy_constructible <Self>, "");
+static_assert (not Move_constructible <Self>, "");
+static_assert (not Copy_assignable <Self>, "");
+static_assert (not Move_assignable <Self>, "");
+#undef Self
 
-//static_assert (Dereferenceable <A>, "");
+
+
+
+
+#define Self move_constructible
+struct Self
+{
+    Self () = delete;
+    Self (Self &&);
+    Self (Self const&) = delete;
+    Self& operator= (Self &&) = delete;
+    Self& operator= (Self const&) = delete;
+};
+static_assert (not Default_constructible <Self>, "");
+static_assert (not Copy_constructible <Self>, "");
+static_assert (Move_constructible <Self>, "");
+static_assert (not Copy_assignable <Self>, "");
+static_assert (not Move_assignable <Self>, "");
+#undef Self
+
+
+
+
+#define Self copy_assignable
+struct Self
+{
+    Self () = delete;
+    Self (Self &&) = delete;
+    Self (Self const&) = delete;
+    Self& operator= (Self &&) = delete;
+    Self& operator= (Self const&);
+};
+static_assert (not Default_constructible <Self>, "");
+static_assert (not Copy_constructible <Self>, "");
+static_assert (not Move_constructible <Self>, "");
+static_assert (Copy_assignable <Self>, "");
+static_assert (not Move_assignable <Self>, "");
+#undef Self
+
+
+
+
+#define Self move_assignable
+struct Self
+{
+    Self () = delete;
+    Self (Self &&) = delete;
+    Self (Self const&) = delete;
+    Self& operator= (Self &&);
+    Self& operator= (Self const&) = delete;
+};
+static_assert (not Default_constructible <Self>, "");
+static_assert (not Copy_constructible <Self>, "");
+static_assert (not Move_constructible <Self>, "");
+static_assert (not Copy_assignable <Self>, "");
+static_assert (Move_assignable <Self>, "");
+#undef Self
+
+
+
+
+
+
 
 
 

@@ -70,25 +70,30 @@ private:
     T y_{};
 };
 
-struct R
-{
-    int i;
-};
+
+
+
+
 
 auto fun () -> int
 {
     
 }
 
-
+#define Concept kuk
+//#define Self BOOST_PP_STRINGIZE (Test, Concept)
+//#define Self BOOST_PP_STRINGIZE (Test, __FILE__)
 
 TEST_CASE ("app")
 {
+    using namespace std;
+//    cout << Self << endl;
     
+//    R i;
+//    R i2 {i};
     Type auto a = fun ();
     
     
-    using namespace std;
     
     auto p1 = Point2D{2, 2};
     auto p2 = Point2D{6, 5};

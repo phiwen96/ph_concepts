@@ -53,8 +53,7 @@ concept is_digit = requires {requires (c >= '0' and c <= '9');};
 
 
 
-template <typename T>
-concept Copy_constructible = std::is_copy_constructible_v <T>;
+
 
 
 //struct copy_constructible
@@ -62,8 +61,7 @@ concept Copy_constructible = std::is_copy_constructible_v <T>;
 //
 //};
 
-template <typename T>
-concept Copy_assignable = std::is_copy_assignable_v <T>;
+
 
 template <typename T>
 concept Destructible = std::is_destructible_v <T>;
@@ -160,6 +158,48 @@ auto ordered_map_copy (T const& a) -> T
 {
     return a;
 }
+
+
+
+
+
+
+
+
+
+
+template <typename T>
+concept Default_constructible = requires ()
+{
+    T {};
+};
+
+template <typename T>
+concept Copy_constructible = requires (T const& a)
+{
+    T {a};
+};
+
+template <typename T>
+concept Move_constructible = requires (T && a)
+{
+    T {std::move (a)};
+};
+
+template <typename T>
+concept Copy_assignable = requires (T& a, T const& b)
+{
+    a = b;
+};
+
+template <typename T>
+concept Move_assignable = requires (T& a, T&& b)
+{
+    a = std::move (b);
+};
+
+
+
 
 
 
