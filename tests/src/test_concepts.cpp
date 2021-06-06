@@ -75,24 +75,49 @@ private:
 
 
 
-auto fun () -> int
+auto fun () -> Number auto
 {
-    
+    return 3;
 }
 
 #define Concept kuk
 //#define Self BOOST_PP_STRINGIZE (Test, Concept)
 //#define Self BOOST_PP_STRINGIZE (Test, __FILE__)
 
+
+//template <auto a, decltype (a)>
+//concept Numeric = true;//std::is_same_v <T, U> and requires (T& a) {
+////    true;
+////};
+
+
+//template <typename T>
+//concept Numeric = true;//std::is_same_v <T, U> and requires (T& a) {
+//    true;
+//};
+
+
+//template <bool T>
+//concept Ja = true;
+//auto func (Numeric<int> auto a){}
+
+
+
 TEST_CASE ("app")
 {
+//    func (true);
+    unsigned i = -3;
+    
     using namespace std;
+    cout << i << endl;
 //    cout << Self << endl;
     
 //    R i;
 //    R i2 {i};
-    Type auto a = fun ();
-    
+    Number auto a = fun ();
+    bool s = true;
+//    ++s;
+    cout << s << endl;
     
     
     auto p1 = Point2D{2, 2};

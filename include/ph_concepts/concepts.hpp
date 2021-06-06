@@ -18,10 +18,78 @@ concept convertible_to = requires (){
 };
 
 template <typename T>
+concept Reference = std::is_reference_v <T>;
+
+//template <typename T>
+//concept Numeric = requires (T& a) {
+//    
+//};
+
+
+template <typename T>
+concept Boolean = requires (T& t)
+{
+    static_cast <bool> (t);
+};
+
+template <typename T>
 concept Unsigned = std::is_unsigned_v <T>;
 
 template <typename T>
 concept Signed = not Unsigned <T>;
+
+template <typename T>
+concept Float = std::is_floating_point_v <T> and requires (T& a, double& b)
+{
+    a = b;
+    b = a;
+    ++a;a++;
+    --a;a--;
+    
+};
+
+template <typename T>
+concept Integer = std::is_integral_v <T> and requires ()
+{
+    true;
+};
+
+
+
+
+//template
+
+
+
+template <typename T>
+concept Number = Signed <T> or Unsigned <T> or
+
+requires (T& a, T& b, float A, int B)
+{
+    a++;++a;
+    a--;--a;
+    a = b;
+    {a - b} -> convertible_to <float>;
+    {a + b} -> convertible_to <float>;
+    {a * b} -> convertible_to <float>;
+    {a / b} -> convertible_to <float>;
+    {a += b} -> Reference;
+    {a *= b} -> Reference;
+    {a /= b} -> Reference;
+    {a < b} -> Boolean;
+    {a > b} -> Boolean;
+    {a <= b} -> Boolean;
+    {a >= b} -> Boolean;
+    {a == b} -> Boolean;
+    
+    
+    
+    
+};
+
+
+
+
 
 
 
@@ -108,8 +176,7 @@ concept Object = Fundamental <T> or Class <T> or requires ()
     requires (false);
 };
 
-template <typename T>
-concept Reference = std::is_lvalue_reference_v <T>;
+
 
 template <typename T>
 concept Rvalue_reference = std::is_rvalue_reference_v <T>;
@@ -197,6 +264,8 @@ concept Move_assignable = requires (T& a, T&& b)
 {
     a = std::move (b);
 };
+
+
 
 
 
