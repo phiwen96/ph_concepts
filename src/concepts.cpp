@@ -24,6 +24,15 @@ struct iter
 //static_assert (Iterator <iter>, "");
 
 
+struct A
+{
+    int i;
+    A &  operator*();
+    A& operator= (A const&) = delete;
+//    A& operator= (A&&){}
+};
+
+//static_assert (Dereferenceable <A>, "");
 
 
 

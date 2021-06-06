@@ -6,41 +6,59 @@
 //#include <ph_concepts/platform.asm>
 
 template <typename T>
-concept Iterator =
-    Copy_constructible <T> and
-    Copy_assignable <T> and
-    Destructible <T> and
-    Incrementable <T>;
+concept Iterator = requires (T& a, T& b)
+{
+    T {a};
+    a = b;
+    a++;
+    ++a;
+};
+
+
 
 template <typename T>
-concept Iterator_Input = Iterator <T> and requires ()
+concept Input_iterator = Iterator <T> and requires (T& t1, T& t2)
 {
-    true;
+    t1 == t2;
+    t1 != t2;
+    *t1;
 };
 
 
 template <typename T>
-concept Iterator_Output = Iterator <T> and requires ()
+concept Output_iterator = Input_iterator <T> and requires (T& t1, T& t2)
 {
-    true;
+    *t1 = *t2;
+    *t1++ = *t2;
 };
 
 template <typename T>
-concept Iterator_Forward = Iterator <T> and requires ()
+concept Forward_iterator = Output_iterator <T> and requires (T& a, T& b)
 {
-    true;
+    T {};
+    a = b;
 };
 
 template <typename T>
-concept Iterator_Bidirectional = Iterator <T> and requires ()
+concept Bidirectional_iterator = Forward_iterator <T> and requires (T& a, T& b)
 {
-    true;
+    --a;
+    a--;
+    *a--;
 };
 
 template <typename T>
-concept Iterator_Random_access = Iterator <T> and requires ()
+concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, T& b, size_t& n)
 {
-    true;
+    {a + n} -> same_as <T>;
+    {a - n} -> same_as <T>;
+    {a - b} -> same_as <T>;
+    {a > b} -> same_as <bool>;
+    {a < b} -> same_as <bool>;
+    {a >= b} -> same_as <bool>;
+    {a <= b} -> same_as <bool>;
+    a += b;
+    a -= b;
 };
 
 

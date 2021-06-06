@@ -46,14 +46,16 @@ concept Incrementable = requires (T& t)
     ++t;
 };
 
-
-
-
 template <typename T>
-concept Dereferenceable = requires (T& t)
+concept Decrementable = requires (T& t)
 {
-    *t;
+    t--;
+    --t;
 };
+
+
+
+
 
 
 
@@ -77,6 +79,23 @@ template <typename T>
 concept Object = Fundamental <T> or Class <T> or requires ()
 {
     requires (false);
+};
+
+template <typename T>
+concept Reference = std::is_lvalue_reference_v <T>;
+
+template <typename T>
+concept Rvalue_reference = std::is_rvalue_reference_v <T>;
+
+template <typename T>
+concept Lvalue_reference = std::is_lvalue_reference_v <T>;
+
+
+
+template <typename T>
+concept Dereferenceable = requires (T& t1, T& t2)
+{
+    {reinterpret_cast <T&> (*t1)} -> Reference;
 };
 
 
