@@ -20,10 +20,7 @@ concept convertible_to = requires (){
 template <typename T>
 concept Reference = std::is_reference_v <T>;
 
-//template <typename T>
-//concept Numeric = requires (T& a) {
-//    
-//};
+
 
 
 template <typename T>
@@ -32,24 +29,31 @@ concept Boolean = requires (T& t)
     static_cast <bool> (t);
 };
 
-template <typename T>
-concept Unsigned = std::is_unsigned_v <T>;
 
 template <typename T>
+concept Unsigned = std::is_unsigned_v <std::decay_t <T>>;
+
+template <typename T, bool...>
 concept Signed = not Unsigned <T>;
 
 template <typename T>
-concept Float = std::is_floating_point_v <T> and requires (T& a, double& b)
+concept Number = Signed <T> or Unsigned <T>;
+
+
+template <typename T>
+concept Char = std::is_same <std::decay_t <T>, char>::value || std::is_same <std::decay_t <T>, char16_t>::value || std::is_same <std::decay_t <T>, char32_t>::value || std::is_same <std::decay_t <T>, wchar_t>::value;
+
+static_assert (Unsigned <unsigned const&>, "");
+
+
+template <typename T, bool...>
+concept Floating = std::is_floating_point_v <std::decay_t <T>> or requires (T a, double& b)
 {
-    a = b;
-    b = a;
-    ++a;a++;
-    --a;a--;
-    
+    true;
 };
 
 template <typename T>
-concept Integer = std::is_integral_v <T> and requires ()
+concept Integer = std::is_integral_v <std::decay_t <T>> and requires ()
 {
     true;
 };
@@ -61,31 +65,7 @@ concept Integer = std::is_integral_v <T> and requires ()
 
 
 
-template <typename T>
-concept Number = Signed <T> or Unsigned <T> or
 
-requires (T& a, T& b, float A, int B)
-{
-    a++;++a;
-    a--;--a;
-    a = b;
-    {a - b} -> convertible_to <float>;
-    {a + b} -> convertible_to <float>;
-    {a * b} -> convertible_to <float>;
-    {a / b} -> convertible_to <float>;
-    {a += b} -> Reference;
-    {a *= b} -> Reference;
-    {a /= b} -> Reference;
-    {a < b} -> Boolean;
-    {a > b} -> Boolean;
-    {a <= b} -> Boolean;
-    {a >= b} -> Boolean;
-    {a == b} -> Boolean;
-    
-    
-    
-    
-};
 
 
 
@@ -225,6 +205,9 @@ auto ordered_map_copy (T const& a) -> T
 {
     return a;
 }
+
+
+
 
 
 

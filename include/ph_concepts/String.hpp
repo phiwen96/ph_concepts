@@ -1,6 +1,6 @@
 #pragma once
 #include "concepts.hpp"
-namespace concepts{
+
 
 template <typename T>
 concept String = requires (T& str)
@@ -17,4 +17,4 @@ concept String = requires (T& str)
     
     
 };
-}
+

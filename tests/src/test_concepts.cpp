@@ -99,14 +99,18 @@ auto fun () -> Number auto
 
 //template <bool T>
 //concept Ja = true;
-//auto func (Numeric<int> auto a){}
+auto func (Signed auto i){}
 
 
 
 TEST_CASE ("app")
 {
+    
 //    func (true);
     unsigned i = -3;
+    
+    Signed auto ii = 4;
+    
     
     using namespace std;
     cout << i << endl;
