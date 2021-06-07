@@ -72,8 +72,38 @@ concept Iterator = requires (T& a, T& b)
     a = b;
     a++;
     ++a;
+    a == b;
+    a != b;
     *a;
 };
+
+auto begin (auto&& x) -> Iterator auto
+    requires requires () {
+        requires requires ()
+        {
+            {x.begin ()} -> Iterator;
+        } or Pointer <decltype (x)>;
+    }
+{
+    using type = decltype (x);
+    
+    if constexpr (Pointer <type>)
+    {
+        return forward (x);
+        
+    } else
+    {
+        return x.begin ();
+    }
+}
+
+auto end (auto&& x) -> Iterator auto
+    requires requires () {
+        {x.end ()} -> Iterator;
+    }
+{
+    return x.end ();
+}
 
 
 
@@ -123,29 +153,24 @@ concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, 
 };
 
 
-
+/**
+ A Container is an object used to store other objects and taking care of the
+ management of the memory used by the objects it contains.
+ */
 template <typename T>
-concept Iterable = requires (T& t)
+concept Container = requires ()
 {
-    requires requires ()
-    {
-        {t.begin ()} -> Iterator;
-        {t.end ()} -> Iterator;
-        
-    }
-//    or requires ()
-//    {
-//        {t.begin ()} -> Pointer;
-//        {t.end ()} -> Pointer;
-//
-//    }
-    or requires (size_t& i)
-    {
-        t [i];
-        {t.size ()} -> convertible_to <size_t>;
-    };
+    true;
 };
 
+template <typename T>
+concept Range = requires (T& a, T const& b)
+{
+    {a.begin ()} -> Iterator;
+    {a.end ()} -> Iterator;
+    {b.begin ()} -> Iterator;
+    {b.end ()} -> Iterator;
+};
 
 template <typename T>
 concept String = requires (T& str)
@@ -163,11 +188,7 @@ concept String = requires (T& str)
 };
 
 
-template <typename T>
-concept Range = requires ()
-{
-    true;
-};
+
 
 
 

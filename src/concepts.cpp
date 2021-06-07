@@ -222,9 +222,19 @@ static_assert (Move_assignable <Self>, "");
 
 
 
+#define Concept Iterator
+static_assert (Iterator <int*>, "");
+static_assert (Iterator <char const*>, "");
+static_assert (Iterator <std::string::iterator>, "");
+static_assert (Iterator <std::vector <int>::iterator>, "");
+static_assert (Iterator <std::vector <int>::const_iterator>, "");
+static_assert (not Iterator <int>, "");
+#undef Concept
 
-
-
+#define Concept Output_iterator
+static_assert (Concept <std::vector<int>::iterator>, "");
+static_assert (not Concept <std::vector<int>::const_iterator>, "");
+#undef Concept
 
 
 
