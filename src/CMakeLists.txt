@@ -10,6 +10,9 @@ add_library (ph_concepts
 target_sources (ph_concepts PRIVATE in/platform.hpp)
 set (self ${PROJECT_NAME})
 
+set_target_properties (${self} PROPERTIES CXX_STANDARD 20)
+target_compile_features (${self} PUBLIC cxx_std_20)
+
 file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.hpp)
 foreach (file ${CONFIGS})
 	get_filename_component (name ${file} NAME)
