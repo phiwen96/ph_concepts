@@ -60,7 +60,120 @@ concept Integer = std::is_integral_v <std::decay_t <T>>;
 template <typename T>
 concept Char = std::is_same <std::decay_t <T>, char>::value || std::is_same <std::decay_t <T>, char16_t>::value || std::is_same <std::decay_t <T>, char32_t>::value || std::is_same <std::decay_t <T>, wchar_t>::value;
 
-static_assert (Unsigned <unsigned const&>, "");
+
+
+
+
+
+template <typename T>
+concept Iterator = requires (T& a, T& b)
+{
+    T {a};
+    a = b;
+    a++;
+    ++a;
+    *a;
+};
+
+
+
+template <typename T>
+concept Input_iterator = Iterator <T> and requires (T& t1, T& t2)
+{
+    t1 == t2;
+    t1 != t2;
+    *t1;
+};
+
+
+template <typename T>
+concept Output_iterator = Input_iterator <T> and requires (T& t1, T& t2)
+{
+    *t1 = *t2;
+    *t1++ = *t2;
+};
+
+template <typename T>
+concept Forward_iterator = Output_iterator <T> and requires (T& a, T& b)
+{
+    T {};
+    a = b;
+};
+
+template <typename T>
+concept Bidirectional_iterator = Forward_iterator <T> and requires (T& a, T& b)
+{
+    --a;
+    a--;
+    *a--;
+};
+
+template <typename T>
+concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, T& b, size_t& n)
+{
+    {a + n} -> same_as <T>;
+    {a - n} -> same_as <T>;
+    {a - b} -> same_as <T>;
+    {a > b} -> Boolean;
+    {a < b} -> Boolean;
+    {a >= b} -> Boolean;
+    {a <= b} -> Boolean;
+    a += b;
+    a -= b;
+};
+
+
+
+template <typename T>
+concept Iterable = requires (T& t)
+{
+    requires requires ()
+    {
+        {t.begin ()} -> Iterator;
+        {t.end ()} -> Iterator;
+        
+    }
+//    or requires ()
+//    {
+//        {t.begin ()} -> Pointer;
+//        {t.end ()} -> Pointer;
+//
+//    }
+    or requires (size_t& i)
+    {
+        t [i];
+        {t.size ()} -> convertible_to <size_t>;
+    };
+};
+
+
+template <typename T>
+concept String = requires (T& str)
+{
+    
+    requires requires (size_t& i)
+    {
+        {str [i]} -> Char;
+    };
+    
+    {str.size ()} -> convertible_to <size_t>;
+    
+    
+    
+};
+
+
+template <typename T>
+concept Range = requires ()
+{
+    true;
+};
+
+
+
+
+
+
 
 
 
