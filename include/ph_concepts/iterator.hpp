@@ -5,7 +5,6 @@
 //#include "ph_concepts/platform.asm"
 //#include <ph_concepts/platform.asm>
 
-namespace concepts{
 
 template <typename T>
 concept Iterator = requires (T& a, T& b)
@@ -55,10 +54,10 @@ concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, 
     {a + n} -> same_as <T>;
     {a - n} -> same_as <T>;
     {a - b} -> same_as <T>;
-    {a > b} -> same_as <bool>;
-    {a < b} -> same_as <bool>;
-    {a >= b} -> same_as <bool>;
-    {a <= b} -> same_as <bool>;
+    {a > b} -> Boolean;
+    {a < b} -> Boolean;
+    {a >= b} -> Boolean;
+    {a <= b} -> Boolean;
     a += b;
     a -= b;
 };
@@ -118,4 +117,4 @@ concept Iterable = requires (T& t)
     };
 };
 
-}
+

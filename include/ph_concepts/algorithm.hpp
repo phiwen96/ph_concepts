@@ -1,6 +1,4 @@
 #pragma once
-
-
 #include "concepts.hpp"
 #include "iterator.hpp"
 #include "common.hpp"
