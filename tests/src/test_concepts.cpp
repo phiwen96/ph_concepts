@@ -105,15 +105,18 @@ auto func (Signed auto i){}
 
 TEST_CASE ("app")
 {
+    using namespace std;
+    int i = 1;
+    cout << (i == true) << endl;
     
 //    func (true);
-    unsigned i = -3;
+//    unsigned i = -3;
     
     Signed auto ii = 4;
     
     
-    using namespace std;
-    cout << i << endl;
+    
+//    cout << i << endl;
 //    cout << Self << endl;
     
 //    R i;
@@ -121,13 +124,13 @@ TEST_CASE ("app")
     Number auto a = fun ();
     bool s = true;
 //    ++s;
-    cout << s << endl;
+//    cout << s << endl;
     
     
     auto p1 = Point2D{2, 2};
     auto p2 = Point2D{6, 5};
     auto d = dist(p1, p2);
-    std::cout << d << endl;
+//    std::cout << d << endl;
     //    auto values = std::vector{9, 2, 5, 3, 4};
     //    std::ranges::sort(values);
     //    char* source = ph::file::read (TEST_FILE);

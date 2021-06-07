@@ -21,12 +21,19 @@ template <typename T>
 concept Reference = std::is_reference_v <T>;
 
 
+template <typename T>
+concept Pointer = requires (T& t)
+{
+    requires (std::is_pointer_v <T>);
+};
+
+
 
 
 template <typename T>
 concept Boolean = requires (T& t)
 {
-    static_cast <bool> (t);
+    {t == true} -> same_as <bool>;
 };
 
 
@@ -39,6 +46,13 @@ concept Signed = not Unsigned <T>;
 template <typename T>
 concept Number = Signed <T> or Unsigned <T>;
 
+template <typename T, bool...>
+concept Floating = std::is_floating_point_v <std::decay_t <T>>;
+
+template <typename T>
+concept Integer = std::is_integral_v <std::decay_t <T>>;
+
+
 
 template <typename T>
 concept Char = std::is_same <std::decay_t <T>, char>::value || std::is_same <std::decay_t <T>, char16_t>::value || std::is_same <std::decay_t <T>, char32_t>::value || std::is_same <std::decay_t <T>, wchar_t>::value;
@@ -46,17 +60,7 @@ concept Char = std::is_same <std::decay_t <T>, char>::value || std::is_same <std
 static_assert (Unsigned <unsigned const&>, "");
 
 
-template <typename T, bool...>
-concept Floating = std::is_floating_point_v <std::decay_t <T>> or requires (T a, double& b)
-{
-    true;
-};
 
-template <typename T>
-concept Integer = std::is_integral_v <std::decay_t <T>> and requires ()
-{
-    true;
-};
 
 
 
@@ -135,11 +139,7 @@ concept Decrementable = requires (T& t)
 
 
 
-template <typename T>
-concept Pointer = requires (T& t)
-{
-    requires (std::is_pointer_v <T>);
-};
+
 
 
 
