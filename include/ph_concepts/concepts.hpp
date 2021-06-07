@@ -27,6 +27,9 @@ concept Pointer = requires (T& t)
     requires (std::is_pointer_v <T>);
 };
 
+template <typename T>
+concept Constant = std::is_const_v <std::remove_reference_t <T>>;
+
 
 
 

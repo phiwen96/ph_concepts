@@ -36,6 +36,14 @@ static_assert (not Concept <int>, "");
 static_assert (not Concept <int&>, "");
 #undef Concept
 
+#define Concept Constant
+static_assert (not Concept <int&>, "");
+static_assert (Concept <int const&>, "");
+static_assert (Concept <int const>, "");
+static_assert (not Concept <int>, "");
+static_assert (not Concept <int*>, "");
+#undef Concept
+
 #define Concept Boolean
 static_assert (Concept <bool>, "");
 static_assert (Concept <bool const>, "");
