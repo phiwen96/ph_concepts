@@ -1,8 +1,9 @@
 #pragma once
-#include <map>
-#include <unordered_map>
-#include "common.hpp"
+//#include <map>
+//#include <unordered_map>
+//#include "common.hpp"
     //using namespace std;
+
 
 template <typename T, typename... U>
 concept same_as_any_of = (std::is_same_v <T, U> or ...);
@@ -483,10 +484,10 @@ concept Dereferenceable = requires (T& t1, T& t2)
     {reinterpret_cast <T&> (*t1)} -> Reference;
 };
 
-template<typename T>
-concept Map =
-std::same_as<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
-std::same_as<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
+//template<typename T>
+//concept Map =
+//std::same_as<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
+//std::same_as<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
 
 
 
@@ -501,21 +502,21 @@ struct is_instantiation <Template, Template <Args...>> : std::true_type {};
 template <typename Class, template <typename...> class Template>
 concept is_instantiation_of = is_instantiation <Template, Class>::value;
 
-template <typename T>
-concept map_type =
-is_instantiation_of<T, std::map> || is_instantiation_of<T, std::unordered_map>;
+//template <typename T>
+//concept map_type =
+//is_instantiation_of<T, std::map> || is_instantiation_of<T, std::unordered_map>;
 
 
-auto map_copy (map_type auto const& a) -> map_type auto
-{
-    return a;
-}
+//auto map_copy (map_type auto const& a) -> map_type auto
+//{
+//    return a;
+//}
 
-template <is_instantiation_of <std::map> T>
-auto ordered_map_copy (T const& a) -> T
-{
-    return a;
-}
+//template <is_instantiation_of <std::map> T>
+//auto ordered_map_copy (T const& a) -> T
+//{
+//    return a;
+//}
 
 
 
