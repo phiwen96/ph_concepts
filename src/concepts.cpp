@@ -27,6 +27,8 @@ static_assert (not Concept <int*>, "");
 #undef Concept
 
 #define Concept Pointer
+static_assert (Concept <const char*>, "");
+static_assert (Concept <char const*>, "");
 static_assert (Concept <int*>, "");
 static_assert (Concept <int**>, "");
 static_assert (Concept <int const*>, "");
@@ -48,7 +50,7 @@ static_assert (not Concept <int*>, "");
 static_assert (Concept <bool>, "");
 static_assert (Concept <bool const>, "");
 static_assert (Concept <bool const&>, "");
-static_assert (Concept <int>, "");
+static_assert (not Concept <int>, "");
 static_assert (not Concept <int*>, "");
 static_assert (Concept <bool>, "");
 static_assert (Concept <bool>, "");
@@ -59,7 +61,7 @@ struct Self {};
 static_assert (not Concept <Self>, "");
 #undef Self
 struct Self {auto operator== (bool) -> bool;};
-static_assert (Concept <Self>, "");
+static_assert (not Concept <Self>, "");
 #undef Concept
 
 
@@ -97,6 +99,10 @@ static_assert (Concept <double>, "");
 static_assert (Concept <double const>, "");
 static_assert (Concept <double const&>, "");
 static_assert (Concept <double&>, "");
+static_assert (Concept <float>, "");
+static_assert (Concept <float const>, "");
+static_assert (Concept <float const&>, "");
+static_assert (Concept <float&>, "");
 static_assert (not Concept <int>, "");
 static_assert (not Concept <int const>, "");
 static_assert (not Concept <int const&>, "");
@@ -144,7 +150,11 @@ static_assert (not Move_assignable <Self>, "");
 
 
 
+#define Concept Floating
+static_assert (Concept <float>, "");
+static_assert (Concept <float>, "");
 
+#undef Concept
 
 #define Self copy_constructible
 struct Self
@@ -235,6 +245,28 @@ static_assert (not Iterator <int>, "");
 static_assert (Concept <std::vector<int>::iterator>, "");
 static_assert (not Concept <std::vector<int>::const_iterator>, "");
 #undef Concept
+
+#define Concept Range
+#define Self range
+struct Self
+{
+    char s[10];
+    
+    auto begin () -> auto*
+    {
+        return s;
+    }
+    auto end () -> auto*
+    {
+        return s + 10;
+    }
+};
+static_assert (Concept <Self>, "");
+#undef Self
+#undef Concept
+
+
+
 
 
 

@@ -22,10 +22,7 @@ concept Reference = std::is_reference_v <T>;
 
 
 template <typename T>
-concept Pointer = requires (T& t)
-{
-    requires (std::is_pointer_v <T>);
-};
+concept Pointer = std::is_pointer_v <T>;
 
 template <typename T>
 concept Constant = std::is_const_v <std::remove_reference_t <T>>;
@@ -33,11 +30,7 @@ concept Constant = std::is_const_v <std::remove_reference_t <T>>;
 
 
 
-template <typename T>
-concept Boolean = requires (T& t)
-{
-    {t == true} -> same_as <bool>;
-};
+
 
 
 template <typename T>
@@ -47,26 +40,127 @@ template <typename T, bool...>
 concept Signed = not Unsigned <T>;
 
 template <typename T>
-concept Number = Signed <T> or Unsigned <T>;
+concept Number = (Signed <T> or Unsigned <T>) and requires (T t){
+    true;
+};
+
+
+template <typename T>
+concept Function = std::is_function_v <std::decay_t <T>>;
+
+#define X(type) same_as <type, std::decay_t <T>> or
+
+#define INTEGER_SIGNED_TYPES \
+    X (short) \
+    X (short int) \
+    X (signed short) \
+    X (signed short int) \
+    X (int) \
+    X (signed) \
+    X (signed int) \
+    X (long) \
+    X (long int) \
+    X (signed long) \
+    X (signed long int) \
+    X (long long) \
+    X (long long int) \
+    X (signed long long) \
+    X (signed long long int)
+
+#define INTEGER_UNSIGNED_TYPES \
+    X (unsigned short) \
+    X (unsigned short int) \
+    X (unsigned) \
+    X (unsigned int) \
+    X (unsigned long) \
+    X (unsigned long int) \
+    X (unsigned long long) \
+    X (unsigned long long int)
+
+#define INTEGER_TYPES \
+    INTEGER_SIGNED_TYPES \
+    INTEGER_UNSIGNED_TYPES
+
+template <typename T>
+concept Integer =
+INTEGER_TYPES
+false;
+
+#define FLOATING_SIGNED_TYPES \
+    X (float) \
+    X (double) \
+    X (long)
+
+#define FLOATING_TYPES \
+    FLOATING_SIGNED_TYPES
 
 template <typename T, bool...>
-concept Floating = std::is_floating_point_v <std::decay_t <T>>;
+concept Floating =
+FLOATING_TYPES
+false;
+
+#define BOOL_TYPES \
+    X (bool)
 
 template <typename T>
-concept Integer = std::is_integral_v <std::decay_t <T>>;
+concept Boolean =
+BOOL_TYPES
+false;
 
+#define CHAR_TYPES \
+    X (char) \
+    X (signed char) \
+    X (unsigned char) \
+    X (char16_t) \
+    X (char32_t) \
+    X (wchar_t)
+
+template <typename T>
+concept Char =
+CHAR_TYPES
+false;
+
+#define INTEGRAL_TYPES \
+    BOOL_TYPES \
+    CHAR_TYPES \
+    INTEGER_SIGNED_TYPES \
+    INTEGER_UNSIGNED_TYPES \
+
+template <typename T>
+concept Integral =
+INTEGRAL_TYPES
+false;
+
+
+#define ARITHMETIC_TYPES \
+    FLOATING_TYPES \
+    INTEGRAL_TYPES \
+
+template <typename T>
+concept Arithmentic =
+ARITHMETIC_TYPES
+false;
+
+    
+
+
+#define FUNDAMENTAL_TYPES \
+    X (void) \
+    X (std::nullptr_t) \
+    ARITHMETIC_TYPES
+
+template <typename T>
+concept Fundamental =
+FUNDAMENTAL_TYPES
+false;
+
+
+template<typename T>
+constexpr T pi{3.1415926535897932385};
 
 
 template <typename T>
-concept Char = std::is_same <std::decay_t <T>, char>::value || std::is_same <std::decay_t <T>, char16_t>::value || std::is_same <std::decay_t <T>, char32_t>::value || std::is_same <std::decay_t <T>, wchar_t>::value;
-
-
-
-
-
-
-template <typename T>
-concept Iterator = requires (T& a, T& b)
+concept Iterator = Pointer <T> or requires (T& a, T& b)
 {
     T {a};
     a = b;
@@ -77,33 +171,73 @@ concept Iterator = requires (T& a, T& b)
     *a;
 };
 
-auto begin (auto&& x) -> Iterator auto
-    requires requires () {
-        requires requires ()
-        {
-            {x.begin ()} -> Iterator;
-        } or Pointer <decltype (x)>;
-    }
+
+
+//auto len (void)
+
+auto begin (Pointer auto p) -> Iterator auto
 {
-    using type = decltype (x);
-    
-    if constexpr (Pointer <type>)
-    {
-        return forward (x);
-        
-    } else
-    {
-        return x.begin ();
-    }
+    return forward (p);
+};
+
+auto begin (auto&& x) -> Iterator auto
+requires requires ()
+{
+    {x.begin ()} -> Iterator;
+}
+{
+    return x.begin ();
 }
 
+
 auto end (auto&& x) -> Iterator auto
-    requires requires () {
-        {x.end ()} -> Iterator;
-    }
+requires requires ()
+{
+#if Debug
+    
+#else
+    
+#endif
+    
+    {x.end ()} -> Iterator;
+}
 {
     return x.end ();
 }
+
+
+auto end (Char auto* p) -> Iterator auto
+{
+    return p + std::strlen (p);
+}
+
+auto end (auto&& x) -> Iterator auto
+requires requires ()
+{
+    true;
+}
+{
+    return x.end ();
+}
+
+//template <typename T, size_t N>
+//auto end (T (&))
+
+//template<typename T, std::size_t N>
+//auto end (T (a) [N]) -> Iterator auto
+//{
+//    return forward (a + N);
+//}
+//
+//template<typename T, std::size_t N>
+//auto end (T (&a) [N]) -> Iterator auto
+//{
+//    return forward (a + N);
+//}
+
+
+
+
 
 
 
@@ -164,28 +298,48 @@ concept Container = requires ()
 };
 
 template <typename T>
-concept Range = requires (T& a, T const& b)
+concept Range = requires ()
 {
-    {a.begin ()} -> Iterator;
-    {a.end ()} -> Iterator;
-    {b.begin ()} -> Iterator;
-    {b.end ()} -> Iterator;
+    requires requires (T& a)
+    {
+        {a.begin ()} -> Iterator;
+        {a.end ()} -> Iterator;
+        
+    } or requires (T const& a)
+    {
+        {a.begin ()} -> Iterator;
+        {a.end ()} -> Iterator;
+    };
 };
 
 template <typename T>
-concept String = requires (T& str)
+struct typeinfo
+{
+    constexpr auto fundamental () -> bool
+    {
+        return true;//requires
+    }
+};
+
+template <typename T>
+struct Get
 {
     
-    requires requires (size_t& i)
-    {
-        {str [i]} -> Char;
-    };
-    
-    {str.size ()} -> convertible_to <size_t>;
-    
-    
+};
+
+template <typename T, size_t N>
+struct Get <T [N]>
+{
+
+};
+
+template <Range R>
+struct Get <R>
+{
     
 };
+
+
 
 
 
@@ -280,11 +434,10 @@ concept Decrementable = requires (T& t)
 
 
 
-template <typename T>
-concept Fundamental = std::is_fundamental_v <T>;
+
 
 template <typename T>
-concept Class = std::is_class_v <T>;
+concept Class = std::is_class_v <std::decay_t <T>>;
 
 
 template <typename T>
@@ -386,6 +539,13 @@ concept Move_assignable = requires (T& a, T&& b)
 };
 
 
+
+
+template <typename T>
+concept Type = requires ()
+{
+    true;
+};
 
 
 
