@@ -1,7 +1,8 @@
 #pragma once
 #include <map>
 #include <unordered_map>
-//using namespace std;
+#include "common.hpp"
+    //using namespace std;
 
 template <typename T, typename... U>
 concept same_as_any_of = (std::is_same_v <T, U> or ...);
@@ -32,7 +33,6 @@ concept Constant = std::is_const_v <std::remove_reference_t <T>>;
 
 
 
-
 template <typename T>
 concept Unsigned = std::is_unsigned_v <std::decay_t <T>>;
 
@@ -51,35 +51,35 @@ concept Function = std::is_function_v <std::decay_t <T>>;
 #define X(type) same_as <type, std::decay_t <T>> or
 
 #define INTEGER_SIGNED_TYPES \
-    X (short) \
-    X (short int) \
-    X (signed short) \
-    X (signed short int) \
-    X (int) \
-    X (signed) \
-    X (signed int) \
-    X (long) \
-    X (long int) \
-    X (signed long) \
-    X (signed long int) \
-    X (long long) \
-    X (long long int) \
-    X (signed long long) \
-    X (signed long long int)
+X (short) \
+X (short int) \
+X (signed short) \
+X (signed short int) \
+X (int) \
+X (signed) \
+X (signed int) \
+X (long) \
+X (long int) \
+X (signed long) \
+X (signed long int) \
+X (long long) \
+X (long long int) \
+X (signed long long) \
+X (signed long long int)
 
 #define INTEGER_UNSIGNED_TYPES \
-    X (unsigned short) \
-    X (unsigned short int) \
-    X (unsigned) \
-    X (unsigned int) \
-    X (unsigned long) \
-    X (unsigned long int) \
-    X (unsigned long long) \
-    X (unsigned long long int)
+X (unsigned short) \
+X (unsigned short int) \
+X (unsigned) \
+X (unsigned int) \
+X (unsigned long) \
+X (unsigned long int) \
+X (unsigned long long) \
+X (unsigned long long int)
 
 #define INTEGER_TYPES \
-    INTEGER_SIGNED_TYPES \
-    INTEGER_UNSIGNED_TYPES
+INTEGER_SIGNED_TYPES \
+INTEGER_UNSIGNED_TYPES
 
 template <typename T>
 concept Integer =
@@ -87,12 +87,12 @@ INTEGER_TYPES
 false;
 
 #define FLOATING_SIGNED_TYPES \
-    X (float) \
-    X (double) \
-    X (long)
+X (float) \
+X (double) \
+X (long)
 
 #define FLOATING_TYPES \
-    FLOATING_SIGNED_TYPES
+FLOATING_SIGNED_TYPES
 
 template <typename T, bool...>
 concept Floating =
@@ -100,7 +100,7 @@ FLOATING_TYPES
 false;
 
 #define BOOL_TYPES \
-    X (bool)
+X (bool)
 
 template <typename T>
 concept Boolean =
@@ -108,12 +108,12 @@ BOOL_TYPES
 false;
 
 #define CHAR_TYPES \
-    X (char) \
-    X (signed char) \
-    X (unsigned char) \
-    X (char16_t) \
-    X (char32_t) \
-    X (wchar_t)
+X (char) \
+X (signed char) \
+X (unsigned char) \
+X (char16_t) \
+X (char32_t) \
+X (wchar_t)
 
 template <typename T>
 concept Char =
@@ -121,10 +121,10 @@ CHAR_TYPES
 false;
 
 #define INTEGRAL_TYPES \
-    BOOL_TYPES \
-    CHAR_TYPES \
-    INTEGER_SIGNED_TYPES \
-    INTEGER_UNSIGNED_TYPES \
+BOOL_TYPES \
+CHAR_TYPES \
+INTEGER_SIGNED_TYPES \
+INTEGER_UNSIGNED_TYPES \
 
 template <typename T>
 concept Integral =
@@ -133,21 +133,21 @@ false;
 
 
 #define ARITHMETIC_TYPES \
-    FLOATING_TYPES \
-    INTEGRAL_TYPES \
+FLOATING_TYPES \
+INTEGRAL_TYPES \
 
 template <typename T>
 concept Arithmentic =
 ARITHMETIC_TYPES
 false;
 
-    
+
 
 
 #define FUNDAMENTAL_TYPES \
-    X (void) \
-    X (std::nullptr_t) \
-    ARITHMETIC_TYPES
+X (void) \
+X (std::nullptr_t) \
+ARITHMETIC_TYPES
 
 template <typename T>
 concept Fundamental =
@@ -170,24 +170,45 @@ concept Iterator = Pointer <T> or requires (T& a, T& b)
     a != b;
     *a;
 };
-
-
-
-//auto len (void)
-
-auto begin (Pointer auto p) -> Iterator auto
+template <typename T>
+concept Iterator_begin = requires (T& t)
 {
-    return forward (p);
+    {t.begin ()} -> Iterator;
+};
+template <typename T>
+concept Iterator_end = requires (T& t)
+{
+    {t.end ()} -> Iterator;
 };
 
-auto begin (auto&& x) -> Iterator auto
-requires requires ()
+
+template <template <typename> typename T>
+concept Not = requires ()
 {
-    {x.begin ()} -> Iterator;
-}
-{
-    return x.begin ();
-}
+    true;
+};
+
+//auto begin (Not <Pointer> auto p) -> Iterator auto
+//{
+//    return forward (p);
+//};
+
+
+
+
+    //auto len (void)
+
+//constexpr auto begin (Pointer auto p) -> Iterator auto
+//{
+//    std::cout << "pointer" << std::endl;
+//    return forward (p);
+//};
+
+//auto begin (Iterator auto x) -> Iterator auto
+//{
+//    std::cout << "iterator" << std::endl;
+//    return x.begin ();
+//}
 
 
 auto end (auto&& x) -> Iterator auto
@@ -220,20 +241,20 @@ requires requires ()
     return x.end ();
 }
 
-//template <typename T, size_t N>
-//auto end (T (&))
+    //template <typename T, size_t N>
+    //auto end (T (&))
 
-//template<typename T, std::size_t N>
-//auto end (T (a) [N]) -> Iterator auto
-//{
-//    return forward (a + N);
-//}
-//
-//template<typename T, std::size_t N>
-//auto end (T (&a) [N]) -> Iterator auto
-//{
-//    return forward (a + N);
-//}
+    //template<typename T, std::size_t N>
+    //auto end (T (a) [N]) -> Iterator auto
+    //{
+    //    return forward (a + N);
+    //}
+    //
+    //template<typename T, std::size_t N>
+    //auto end (T (&a) [N]) -> Iterator auto
+    //{
+    //    return forward (a + N);
+    //}
 
 
 
@@ -330,7 +351,7 @@ struct Get
 template <typename T, size_t N>
 struct Get <T [N]>
 {
-
+    
 };
 
 template <Range R>
@@ -356,7 +377,7 @@ struct Get <R>
 
 
 
-//template
+    //template
 
 
 
@@ -373,18 +394,18 @@ struct Get <R>
 
 template <typename T>
 concept Type_information = requires () {
-    /// Type traits that return information about a type as a boolean or an integer value.
+        /// Type traits that return information about a type as a boolean or an integer value.
     {T::value} -> same_as <bool>;
-//    {typename T::value_type} -> same_as <int>;
+        //    {typename T::value_type} -> same_as <int>;
 };
 
 
 
 template <typename T>
 concept Type_transformation = requires () {
-    /// Type traits that return a new type
+        /// Type traits that return a new type
     {T::value} -> same_as <bool>;
-//    {typename T::value_type} -> same_as <int>;
+        //    {typename T::value_type} -> same_as <int>;
 };
 
 
@@ -399,10 +420,10 @@ concept is_digit = requires {requires (c >= '0' and c <= '9');};
 
 
 
-//struct copy_constructible
-//{
-//
-//};
+    //struct copy_constructible
+    //{
+    //
+    //};
 
 
 
@@ -464,8 +485,8 @@ concept Dereferenceable = requires (T& t1, T& t2)
 
 template<typename T>
 concept Map =
-    std::same_as<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
-    std::same_as<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
+std::same_as<T, std::map<typename T::key_type, typename T::mapped_type, typename T::key_compare, typename T::allocator_type>> ||
+std::same_as<T, std::unordered_map<typename T::key_type, typename T::mapped_type, typename T::hasher, typename T::key_equal, typename T::allocator_type>>;
 
 
 
@@ -482,7 +503,7 @@ concept is_instantiation_of = is_instantiation <Template, Class>::value;
 
 template <typename T>
 concept map_type =
-    is_instantiation_of<T, std::map> || is_instantiation_of<T, std::unordered_map>;
+is_instantiation_of<T, std::map> || is_instantiation_of<T, std::unordered_map>;
 
 
 auto map_copy (map_type auto const& a) -> map_type auto
@@ -546,6 +567,7 @@ concept Type = requires ()
 {
     true;
 };
+
 
 
 

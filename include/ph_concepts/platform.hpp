@@ -9,8 +9,6 @@
 // #define _arm64 1
 // #define _Processor 
 
-template <typename >
-
 template <typename T>
 concept Darwin = true;
 

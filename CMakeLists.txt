@@ -45,7 +45,7 @@ endif ()
 
 add_subdirectory (cmake/phake)
 
-message()
+# message("tjo")
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	

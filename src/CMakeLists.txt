@@ -19,7 +19,16 @@ foreach (file ${CONFIGS})
 	# message ("hej ${file}")
 	configure_file (${file} ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/${name} @ONLY)
 endforeach ()
+# add_custom_command(
+#     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
+#     COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/custom_header.h.in ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
+#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/custom_header.h.in
+# )
 
+# add_custom_target(
+#     custom_header_target
+#     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
+# )
 ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch} ${boost_pch})
 
 add_library (ph::concepts ALIAS ph_concepts)

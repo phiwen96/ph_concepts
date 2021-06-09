@@ -8,8 +8,9 @@
 //#include <ph_file/file.hpp>
 #include <ph_concepts/concepts.hpp>
 #include <ph_concepts/platform.hpp>
-#include <ph_concepts/algorithm.hpp>
-#include <ph_concepts/Type.hpp>
+//#include <ph_concepts/algorithm.hpp>
+//#include <ph_concepts/Type.hpp>
+//#include <ph_concepts/common.hpp>
 
 //#include <ranges>
 
@@ -18,7 +19,7 @@ auto tes (Darwin auto d)
     
 }
 
-using namespace std;
+//using namespace std;
 
 
 struct A
@@ -102,12 +103,104 @@ auto fun () -> Number auto
 auto func (Signed auto i){}
 
 
+TEST_CASE ("begin")
+{
+    GIVEN ("char []")
+    {
+        char str[] {"hej"};
+//        std::cout << "hej" << std::endl;
+//        REQUIRE (*begin (str) == 'h');
+//        std::cout << "då" << std::endl;
+
+    }
+    
+    GIVEN ("char [4]")
+    {
+        char str[4] {"hej"};
+//        REQUIRE (*begin (str) == 'h');
+    }
+    
+    GIVEN ("char const*")
+    {
+        char const* str {"hej"};
+//        REQUIRE (*begin (str) == 'h');
+    }
+    
+    GIVEN ("std::string")
+    {
+        std::string str {"hej"};
+//        REQUIRE (*begin (str) == 'h');
+    }
+    
+    GIVEN ("std::vector")
+    {
+        std::vector<int> str {1, 2, 3};
+        REQUIRE (*begin (str) == 1);
+    }
+    
+    GIVEN ("std::array")
+    {
+        std::array<int, 3> str {1, 2, 3};
+        REQUIRE (*begin (str) == 1);
+    }
+}
+
+TEST_CASE ("end")
+{
+    GIVEN ("char []")
+    {
+        char str[] {"hej"};
+        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("char [4]")
+    {
+        char str[4] {"hej"};
+        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("char const*")
+    {
+        char const* str {"hej"};
+        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("int []")
+    {
+        int str[] {1, 2};
+//        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("int [4]")
+    {
+        int str[4] {1, 2, 3, 4};
+//        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("std::string")
+    {
+        std::string str {"hej"};
+        REQUIRE (*(end (str) - 1) == 'j');
+    }
+    
+    GIVEN ("std::vector")
+    {
+        std::vector<int> str {1, 2, 3};
+        REQUIRE (*(end (str) - 1) == 3);
+    }
+    
+    GIVEN ("std::array")
+    {
+        std::array<int, 3> str {1, 2, 3};
+        REQUIRE (*(end (str) - 1) == 3);
+    }
+}
 
 TEST_CASE ("app")
 {
-    using namespace std;
+//    using namespace std;
     int i = 1;
-    cout << (i == true) << endl;
+//    cout << (i == true) << endl;
     
 //    func (true);
 //    unsigned i = -3;
@@ -135,7 +228,7 @@ TEST_CASE ("app")
     //    std::ranges::sort(values);
     //    char* source = ph::file::read (TEST_FILE);
     //    free (source);
-    cout << "hi" << endl;
+//    cout << "hi" << endl;
 }
 
 
