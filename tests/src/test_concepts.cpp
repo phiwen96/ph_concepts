@@ -15,9 +15,24 @@
 
 //#include <ranges>
 
+#define two
+#ifdef two
+template <typename Comp>
+concept Compiler = requires (Comp& comp)
+{
+//    {String auto res = Comp {"hej"}};
+    true;
+};
+#endif
+
 auto tes (ph::Darwin auto d)
 {
     
+}
+
+TEST_CASE ()
+{
+    std::cout << "bajs" << std::endl;
 }
 
 //using namespace std;
@@ -104,7 +119,8 @@ auto fun () -> ph::Number auto
 auto func (ph::Signed auto i){}
 
 
-
+//[[using CC: opt(1), debug]]
+//struct
 
 TEST_CASE ("app")
 {

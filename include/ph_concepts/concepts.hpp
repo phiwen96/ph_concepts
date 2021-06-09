@@ -50,7 +50,7 @@ namespace ph
     template <typename T>
     concept Function = std::is_function_v <std::decay_t <T>>;
     
-#define X(type) same_as <type, std::decay_t <T>> or
+
     
 #define INTEGER_SIGNED_TYPES \
 X (short) \
@@ -83,10 +83,12 @@ X (unsigned long long int)
 INTEGER_SIGNED_TYPES \
 INTEGER_UNSIGNED_TYPES
     
+#define X(type) or same_as <type, std::decay_t <T>>
+    
     template <typename T>
     concept Integer =
-    INTEGER_TYPES
-    false;
+    false INTEGER_TYPES;
+//    false;
     
 #define FLOATING_SIGNED_TYPES \
 X (float) \
@@ -98,29 +100,34 @@ FLOATING_SIGNED_TYPES
     
     template <typename T, bool...>
     concept Floating =
-    FLOATING_TYPES
-    false;
+    false FLOATING_TYPES;
+//    false;
     
 #define BOOL_TYPES \
 X (bool)
     
     template <typename T>
     concept Boolean =
-    BOOL_TYPES
-    false;
+    false BOOL_TYPES;
+    
+#undef X
+//    false;
     
 #define CHAR_TYPES \
-X (char) \
-X (signed char) \
-X (unsigned char) \
-X (char16_t) \
-X (char32_t) \
-X (wchar_t)
-    
-    template <typename T>
+X (char, 5) \
+X (signed char, 4) \
+X (unsigned char, 3) \
+X (char16_t, 2) \
+X (char32_t, 1) \
+X (wchar_t, 0)
+
+    template <typename T, template <typename> typename... Concepts>
     concept Char =
-    CHAR_TYPES
-    false;
+#define X(t, i) or same_as <t, std::decay_t <T>>
+    false CHAR_TYPES;
+#undef X
+//    requires false CHAR_TYPES;
+//    false;
     
 #define INTEGRAL_TYPES \
 BOOL_TYPES \
@@ -128,20 +135,20 @@ CHAR_TYPES \
 INTEGER_SIGNED_TYPES \
 INTEGER_UNSIGNED_TYPES \
 
-    template <typename T>
-    concept Integral =
-    INTEGRAL_TYPES
-    false;
+//    template <typename T>
+//    concept Integral =
+//     INTEGRAL_TYPES;
+//    false;
     
     
 #define ARITHMETIC_TYPES \
 FLOATING_TYPES \
 INTEGRAL_TYPES \
 
-    template <typename T>
-    concept Arithmentic =
-    ARITHMETIC_TYPES
-    false;
+//    template <typename T, template <typename> typename... Concepts>
+//    concept Arithmentic =
+//     ARITHMETIC_TYPES;
+//    false;
     
     
     
@@ -151,10 +158,10 @@ X (void) \
 X (std::nullptr_t) \
 ARITHMETIC_TYPES
     
-    template <typename T>
-    concept Fundamental =
-    FUNDAMENTAL_TYPES
-    false;
+//    template <typename T>
+//    concept Fundamental =
+//     FUNDAMENTAL_TYPES;
+//    false;
     
     
     template<typename T>
@@ -218,52 +225,34 @@ ARITHMETIC_TYPES
     auto end (auto&& x) -> Iterator auto
     requires requires ()
     {
-#if Debug
-        
-#else
-        
-#endif
-        
         {x.end ()} -> Iterator;
     }
     {
         return x.end ();
     }
     
-    
+    const wchar_t* str = L"爆ぜろリアル！弾けろシナプス！パニッシュメントディス、ワールド！";
+
     auto end (Char auto* p) -> Iterator auto
     {
         return p + std::strlen (p);
     }
     
-        //    auto end (auto&& x) -> Iterator auto
-        //    requires requires ()
-        //    {
-        //        true;
-        //    }
-        //    {
-        //        return x.end ();
-        //    }
+     
     
-        //template <typename T, size_t N>
-        //auto end (T (&))
-    
-        //template<typename T, std::size_t N>
-        //auto end (T (a) [N]) -> Iterator auto
-        //{
-        //    return forward (a + N);
-        //}
-        //
-        //template<typename T, std::size_t N>
-        //auto end (T (&a) [N]) -> Iterator auto
-        //{
-        //    return forward (a + N);
-        //}
+    template <typename T>
+    concept String = requires (T& str)
+    {
+        {*str.begin ()} -> convertible_to <char>;
+//        true;
+    };
     
     
-    
-    
-    
+    template <typename key>
+    concept Key = requires (key& k_0, key& k_1)
+    {
+        {k_0 == k_1} -> Char;
+    };
     
     
     template <typename T>
@@ -457,11 +446,11 @@ ARITHMETIC_TYPES
     concept Class = std::is_class_v <std::decay_t <T>>;
     
     
-    template <typename T>
-    concept Object = Fundamental <T> or Class <T> or requires ()
-    {
-        requires (false);
-    };
+//    template <typename T>
+//    concept Object = Fundamental <T> or Class <T> or requires ()
+//    {
+//        requires (false);
+//    };
     
     
     
@@ -571,7 +560,15 @@ ARITHMETIC_TYPES
 
 
 
+#define operator Operator
 
+namespace ph::operators::bitwise {
 
-
+    template <typename T>
+    concept And = requires ()
+    {
+        true;
+    };
+}
+#undef operator
 
