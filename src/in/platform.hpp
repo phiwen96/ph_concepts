@@ -10,12 +10,16 @@
 // #define _Processor @_Processor@
 
 template <typename T>
-concept Darwin = 1 == @_Darwin@;
+concept Darwin = @_Darwin@;
+
 template <typename T>
-concept Linux = 1 == @_Linux@;
+concept Linux = @_Linux@;
+
 template <typename T>
-concept Windows = 1 == @_Windows@;
+concept Windows = @_Windows@;
+
 template <typename T>
-concept X86_64 = 1 == @_x86_64@;
+concept X86_64 = @_x86_64@;
+
 template <typename T>
-concept Arm64 = 1 == @_arm64@;
+concept Arm64 = @_arm64@;

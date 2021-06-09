@@ -13,26 +13,26 @@ enable_language(ASM_NASM)
 
 
 # processor
-set (_x86_64 0)
-set (_arm64 0)
+set (_x86_64 "false")
+set (_arm64 "false")
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
-    set (_x86_64 1)
+    set (_x86_64 "true")
 elseif (${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
-	set (_arm64 1)
+	set (_arm64 "true")
 else ()
     message (FATAL_ERROR "unknown processor")
 endif ()
 
-set (_Darwin 0)
-set (_Linux 0)
-set (_Windows 0)
+set (_Darwin "false")
+set (_Linux "false")
+set (_Windows "false")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # message("Darwin")
-    set (_Darwin 1)
+    set (_Darwin "true")
     # add_compile_definitions (Darwin)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set (_Linux 1)
+    set (_Linux "true")
     # add_compile_definitions (Linux)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message (FATAL_ERROR "not yet defined for Windows")
@@ -44,6 +44,8 @@ else ()
 endif ()
 
 add_subdirectory (cmake/phake)
+
+message()
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	

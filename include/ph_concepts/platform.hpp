@@ -9,13 +9,19 @@
 // #define _arm64 1
 // #define _Processor 
 
+template <typename >
+
 template <typename T>
-concept Darwin = 1 == 1;
+concept Darwin = true;
+
 template <typename T>
-concept Linux = 1 == 0;
+concept Linux = false;
+
 template <typename T>
-concept Windows = 1 == 0;
+concept Windows = false;
+
 template <typename T>
-concept X86_64 = 1 == 0;
+concept X86_64 = false;
+
 template <typename T>
-concept Arm64 = 1 == 1;
+concept Arm64 = true;
