@@ -8,13 +8,14 @@
 //#include <ph_file/file.hpp>
 #include <ph_concepts/concepts.hpp>
 #include <ph_concepts/platform.hpp>
+
 //#include <ph_concepts/algorithm.hpp>
 //#include <ph_concepts/Type.hpp>
 //#include <ph_concepts/common.hpp>
 
 //#include <ranges>
 
-auto tes (Darwin auto d)
+auto tes (ph::Darwin auto d)
 {
     
 }
@@ -76,7 +77,7 @@ private:
 
 
 
-auto fun () -> Number auto
+auto fun () -> ph::Number auto
 {
     return 3;
 }
@@ -100,7 +101,7 @@ auto fun () -> Number auto
 
 //template <bool T>
 //concept Ja = true;
-auto func (Signed auto i){}
+auto func (ph::Signed auto i){}
 
 
 
@@ -114,7 +115,7 @@ TEST_CASE ("app")
 //    func (true);
 //    unsigned i = -3;
     
-    Signed auto ii = 4;
+    ph::Signed auto ii = 4;
     
     
     
@@ -123,7 +124,7 @@ TEST_CASE ("app")
     
 //    R i;
 //    R i2 {i};
-    Number auto a = fun ();
+    ph::Number auto a = fun ();
     bool s = true;
 //    ++s;
 //    cout << s << endl;
