@@ -47,8 +47,67 @@ add_subdirectory (cmake/phake)
 
 # message("tjo")
 
+
+
+
+# find_package( Doxygen )
+
+if (DOXYGEN_FOUND)
+
+# Find all the public headers
+# get_target_property(${CMAKE_PROJECT_NAME}_PUBLIC_HEADER_DIR ${CMAKE_PROJECT_NAME} INTERFACE_INCLUDE_DIRECTORIES)
+# file(GLOB_RECURSE ${CMAKE_PROJECT_NAME}_PUBLIC_HEADERS ${CAT_CUTIFIER_PUBLIC_HEADER_DIR}/*.h)
+
+macro (set_doxy_flags)
+	set( DOXYGEN_OUTPUT_DIRECTORY doxygen )
+	set( DOXYGEN_COLLABORATION_GRAPH YES )
+	set( DOXYGEN_EXTRACT_ALL YES )
+	set( DOXYGEN_CLASS_DIAGRAMS YES )
+	set( DOXYGEN_HIDE_UNDOC_RELATIONS NO )
+	set( DOXYGEN_HAVE_DOT YES )
+	set( DOXYGEN_CLASS_GRAPH YES )
+	set( DOXYGEN_CALL_GRAPH YES )
+	set( DOXYGEN_CALLER_GRAPH YES )
+	set( DOXYGEN_COLLABORATION_GRAPH YES )
+	set( DOXYGEN_BUILTIN_STL_SUPPORT YES )
+	set( DOXYGEN_EXTRACT_PRIVATE YES )
+	set( DOXYGEN_EXTRACT_PACKAGE YES )
+	set( DOXYGEN_EXTRACT_STATIC YES )
+	set( DOXYGEN_EXTRACT_LOCALMETHODS YES )
+	set( DOXYGEN_UML_LOOK YES )
+	set( DOXYGEN_UML_LIMIT_NUM_FIELDS 50 )
+	set( DOXYGEN_TEMPLATE_RELATIONS YES )
+	set( DOXYGEN_DOT_GRAPH_MAX_NODES 100 )
+	set( DOXYGEN_MAX_DOT_GRAPH_DEPTH 0 )
+	set( DOXYGEN_DOT_TRANSPARENT YES )
+endmacro ()
+    # set input and output files
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs_doxygen/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.out)
+
+    # request to configure the file
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Doxygen build started")
+
+    # Note: do not put "ALL" - this builds docs together with application EVERY TIME!
+    add_custom_target( docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM )
+else (DOXYGEN_FOUND)
+  message("Doxygen need to be installed to generate the doxygen documentation")
+endif (DOXYGEN_FOUND)
+
+
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+
 	
+
+
+
+
 	# Let's ensure -std=g++xx instead of -std=c++xx
 	set (CMAKE_CXX_STANDARD 20)
 	set (CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -8,6 +8,8 @@
 //#include <ph_file/file.hpp>
 #include <ph_concepts/concepts.hpp>
 #include <ph_concepts/platform.hpp>
+#include <ph_concepts/common.hpp>
+#include <ph_concepts/memory.hpp>
 
 //#include <ph_concepts/algorithm.hpp>
 //#include <ph_concepts/Type.hpp>
@@ -122,10 +124,208 @@ auto func (ph::Signed auto i){}
 //[[using CC: opt(1), debug]]
 //struct
 
+struct AA {
+    inline static int times {0};
+    int i {times++};
+};
+
+struct
+{
+    int i = 0;
+} kiss;
+
+#define cout std::cout
+#define endl std::endl;
+
+
+
+
+
+template <ph::Token token_type>
+auto lex (ph::String auto source) -> ph::Range <token_type> auto
+{
+//    std::vector <>
+}
+
+
+//5 + 4 - (3 + 2);
+
+
+
+//- 4 * 5 + 6 - ( 7 + 8 ) / 9
+
+
+using namespace ph;
+
+template <typename T>
+concept Symbol = requires ()
+{
+    true;
+};
+
+template <typename T, typename U>
+concept Stack = requires (T& t, U& u)
+{
+    {t.push (u)} -> same_as <void>;
+    {t.pop ()} -> same_as <U&&>;
+    {t.top ()} -> same_as <U&>;
+};
+
+
+template <typename T>
+struct stack
+{
+    
+    auto push (int) {
+        
+    }
+    auto pop () {
+        return 5;
+    }
+};
+
+template <typename T>
+concept Production_rule = requires ()
+{
+    true;
+};
+
+template <typename T>
+concept Grammar = requires ()
+{
+    true;
+};
+
+
+
+
+//template <Grammar G>
+//auto parse (Range auto r)
+//{
+//
+//    for (auto const& tok : r)
+//    {
+//
+//    }
+//}
+
+auto match (Range auto) -> Boolean auto;
+
+
+enum TOKEN : uint8_t
+{
+    PLUS, MINUS, STAR,
+    NUMBER, STRING, LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET
+};
+
+enum OPCODE : uint8_t
+{
+    ADD,
+    CONSTANT,
+    RETURN
+};
+
+auto parse (Range <TOKEN>  auto a)
+{
+    
+}
+
+auto vm (Range <OPCODE> auto a)
+{
+    
+}
+
+
+auto push_bytes () {
+    
+}
+
+
+
+
+template <typename>
+concept teee = true;
+
+template <teee>
+struct tee {};
+
+
+
+
+TEST_CASE ("memory")
+{
+    ph::Pointer auto p = ph::memory::allocate (1);
+    ph::memory::reallocate (p, 10);
+    ph::memory::deallocate (p);
+}
+
+struct pstack
+{
+    
+};
+
+struct shift_reduce_parser
+{
+    std::vector <TOKEN> tokens;
+    
+};
+
+
+template <typename T>
+concept Shift_reduce_parser = requires (T& t)
+{
+    typename T::token_type;
+    {T::shift_in}; /// read one symbol from the input and pushing it onto the stack
+    true;
+};
+
+
 TEST_CASE ("app")
 {
+//    String auto inp = "
+    
+    auto tokens = {NUMBER, PLUS, NUMBER};
+    
+    
+    auto chunk = std::vector <uint8_t> {};
+    auto constants = std::vector <uint8_t> {};
+    
+    chunk.push_back (OPCODE::CONSTANT);
+    
+    int constant_index = 0;
+    
+    chunk.push_back (constant_index);
+    
+    parse (tokens);
+    
+    
+    
+    for (auto i : tokens)
+        cout << i << endl;
+    
+    auto scanner = [] (String auto source) -> Range <char> auto
+    {
+        for (auto c : source)
+        {
+            cout << c << endl;
+        }
+        return str;
+    };
+    
+//    scanner ("hej");
+    cout << "hi" << endl;
+    
+
+//    std::cout << kiss.i << std::endl;
+//    int x = 1, y = 1;
+//    std::cout << x << " " << y << '\n';
+//    const auto foo = [&x, y]() { ++x; };
+//    foo();
+//    std::cout << x << " " << y << '\n';
+//    foo();
+//    std::cout << x << " " << y << '\n';
 //    using namespace std;
-    int i = 1;
+//    int i = 1;
 //    cout << (i == true) << endl;
     
 //    func (true);

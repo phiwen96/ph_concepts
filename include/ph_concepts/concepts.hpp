@@ -6,6 +6,10 @@
 
 namespace ph
 {
+    
+    
+    
+    
     template <typename T, typename... U>
     concept same_as_any_of = (std::is_same_v <T, U> or ...);
     
@@ -19,6 +23,12 @@ namespace ph
     concept convertible_to = requires (){
         requires std::is_convertible_v <A, B>;
     };
+    
+    
+    template <typename T>
+    concept Size = convertible_to <std::decay_t <T>, std::size_t>;
+    
+    
     
     template <typename T>
     concept Reference = std::is_reference_v <T>;
@@ -155,13 +165,14 @@ INTEGRAL_TYPES \
     
 #define FUNDAMENTAL_TYPES \
 X (void) \
-X (std::nullptr_t) \
-ARITHMETIC_TYPES
+X (std::nullptr_t)
+//    X (ARITHMETIC_TYPES)
     
 //    template <typename T>
 //    concept Fundamental =
-//     FUNDAMENTAL_TYPES;
-//    false;
+//#define X(t) or same_as <t, std::decay_t <T>>
+//    false FUNDAMENTAL_TYPES or ARITHMETIC_TYPES;
+//#undef X
     
     
     template<typename T>
@@ -238,13 +249,37 @@ ARITHMETIC_TYPES
         return p + std::strlen (p);
     }
     
+    
+    
+    template <typename T, typename... U>
+    concept Range = requires (T& t)
+    {
+        requires (sizeof... (U) == 0);
+        ph::begin (t);
+        ph::end (t);
+        
+    } or requires (T& t)
+    {
+        requires (sizeof... (U) == 1);
+        {*ph::begin (t)} -> convertible_to <std::tuple_element_t <0, std::tuple <U...>>>;
+        {*ph::end (t)} -> convertible_to <std::tuple_element_t <0, std::tuple <U...>>>;
+    };
+    
+    auto len (Range auto const& r) -> Size auto
+    {
+        return static_cast <size_t> (r);
+    }
+    
+    constexpr auto len (auto&&... a) -> Size auto
+    {
+        return sizeof... (a);
+    }
      
     
     template <typename T>
-    concept String = requires (T& str)
+    concept String = Range <char> and requires (T& str)
     {
-        {*str.begin ()} -> convertible_to <char>;
-//        true;
+        true;//        true;
     };
     
     
@@ -258,46 +293,54 @@ ARITHMETIC_TYPES
     template <typename T>
     concept Input_iterator = Iterator <T> and requires (T& t1, T& t2)
     {
-        t1 == t2;
-        t1 != t2;
-        *t1;
+        /// Supports read only and step forward (once)
+        {*t1};
+        ++t1;
+        t1++;
+//        t1 == t2;
+//        t1 != t2;
+//        *t1;
     };
     
     
     template <typename T>
     concept Output_iterator = Input_iterator <T> and requires (T& t1, T& t2)
     {
+        /// Supports write only and step forward (once)
         *t1 = *t2;
-        *t1++ = *t2;
+        ++t1;
+        t1++;
     };
     
     template <typename T>
     concept Forward_iterator = Output_iterator <T> and requires (T& a, T& b)
     {
-        T {};
-        a = b;
+        /// Supports read and write and step forward
+        true;
     };
     
     template <typename T>
     concept Bidirectional_iterator = Forward_iterator <T> and requires (T& a, T& b)
     {
+        /// Supports read, write, step forward, and step backward.
         --a;
         a--;
-        *a--;
+    };
+    
+
+    
+    template <typename T>
+    concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, T& b, size_t& i)
+    {
+        /// : Supports read, write, step forward, step backward, and jump to an arbitrary position in constant time
+        {a [i]} -> Reference;
     };
     
     template <typename T>
-    concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, T& b, size_t& n)
+    concept Contiguous_iterator = Random_access_iterator <T> and requires (T& a, T& b, size_t& i)
     {
-        {a + n} -> same_as <T>;
-        {a - n} -> same_as <T>;
-        {a - b} -> same_as <T>;
-        {a > b} -> Boolean;
-        {a < b} -> Boolean;
-        {a >= b} -> Boolean;
-        {a <= b} -> Boolean;
-        a += b;
-        a -= b;
+        /// The same as random access iterators, but also guarantees that the underlying data is a contiguous block of memory, such as std::string, std::vector, std::array, std::span, and the (rarely used) std::valarray.
+        true;
     };
     
     
@@ -305,27 +348,40 @@ ARITHMETIC_TYPES
      A Container is an object used to store other objects and taking care of the
      management of the memory used by the objects it contains.
      */
+//    template <typename C, typename... U>
+//    concept Container = Range <C> and requires (C& c, size_t i)
+//    {
+//        same_as <std::decay_t <decltype (c[19])>, <#typename B#>>
+//        true;
+//    };
+    
+    
+    
+    
+    
+    
+    
+ 
+    
     template <typename T>
-    concept Container = requires ()
+    concept Token = requires ()
     {
         true;
     };
     
-    template <typename T>
-    concept Range = requires (T& t)
-    {
-        ph::begin (t);
-        ph::end (t);
-    };
+    
+    
     
     template <typename T>
     struct typeinfo
     {
-        constexpr auto fundamental () -> bool
-        {
-            return true;//requires
-        }
+        
     };
+    
+    
+    
+//    template <typename
+    
     
     template <typename T>
     struct Get
@@ -544,18 +600,34 @@ ARITHMETIC_TYPES
         a = std::move (b);
     };
     
-    
-    
+
     
     template <typename T>
-    concept Type = requires ()
+    concept Lexer = requires (T& t)
     {
         true;
     };
     
     
     
+    
+    
+    
+    
+    
+    template <typename T>
+    concept Grammar = requires ()
+    {
+        
+        typename T::non_terminal_symbols_type;
+        typename T::terminal_symbols_type;
+        typename T::start_symbol_type;
+        true;
+    };
+    
+    
 }
+
 
 
 
@@ -571,4 +643,22 @@ namespace ph::operators::bitwise {
     };
 }
 #undef operator
+
+
+
+
+
+    //library code
+    namespace B { //library name the user knows
+        inline namespace A { //ABI version the user doesn't know about
+            template<class T> class myclass{int a;};
+        }
+    }
+
+    // user code
+    namespace B { //user thinks the library uses this namespace
+        template<> class myclass<int> {};
+    }
+
+
 
