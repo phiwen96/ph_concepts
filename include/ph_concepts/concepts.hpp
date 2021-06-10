@@ -19,9 +19,9 @@ namespace ph
     };
     
     
-    template <typename A, typename B>
+    template <typename From, typename To>
     concept convertible_to = requires (){
-        requires std::is_convertible_v <A, B>;
+        requires std::is_convertible_v <From, To>;
     };
     
     
@@ -267,13 +267,13 @@ X (std::nullptr_t)
     
     auto len (Range auto const& r) -> Size auto
     {
-        return static_cast <size_t> (r);
+        return static_cast <size_t> (ph::end (r) - ph::begin (r));
     }
     
-    constexpr auto len (auto&&... a) -> Size auto
-    {
-        return sizeof... (a);
-    }
+//    constexpr auto len (auto&&... a) -> Size auto
+//    {
+//        return sizeof... (a);
+//    }
      
     
     template <typename T>

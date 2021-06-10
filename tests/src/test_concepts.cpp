@@ -10,6 +10,12 @@
 #include <ph_concepts/platform.hpp>
 #include <ph_concepts/common.hpp>
 #include <ph_concepts/memory.hpp>
+#include <ph_concepts/algorithm.hpp>
+#include <ph_concepts/variant.hpp>
+
+//#include <ph_concepts/types.hpp>
+
+
 
 //#include <ph_concepts/algorithm.hpp>
 //#include <ph_concepts/Type.hpp>
@@ -34,7 +40,7 @@ auto tes (ph::Darwin auto d)
 
 TEST_CASE ()
 {
-    std::cout << "bajs" << std::endl;
+//    std::cout << "bajs" << std::endl;
 }
 
 //using namespace std;
@@ -280,11 +286,40 @@ concept Shift_reduce_parser = requires (T& t)
 };
 
 
+TEST_CASE ("variant")
+{
+    cout << "yooo" << endl;
+    auto v0 = _uni <std::string, int, double> {"hej"};
+    auto v1 = _uni <std::string, float, std::string> {6.8f};
+//    v1 = 5;
+}
+
+
 TEST_CASE ("app")
 {
 //    String auto inp = "
     
-    auto tokens = {NUMBER, PLUS, NUMBER};
+//    auto tokens = {NUMBER, PLUS, NUMBER};
+    
+    auto arr = std::vector <int> {3, 4, 5};
+    auto arr2 = std::vector <int>{3, 4, 5};
+//    cout << len(arr) << endl;
+    REQUIRE(len(arr) == 3);
+    assert(len(arr) == len(arr2));
+//    cout << same_as <element_type_of<decltype(arr)>, int&> << endl;
+
+    
+    
+//    for (auto i : arr)cout<<i<<endl;
+    
+    
+//    ph::transform (arr, arr2, [](auto&& i){return forward (i);});
+//    ph::for_each (arr, [](auto&& t){cout<<t<<"::"<<endl;});
+
+    auto tokens = std::vector {NUMBER, PLUS, NUMBER};
+
+    
+    
     
     
     auto chunk = std::vector <uint8_t> {};
@@ -300,20 +335,20 @@ TEST_CASE ("app")
     
     
     
-    for (auto i : tokens)
-        cout << i << endl;
+//    for (auto i : tokens)
+//        cout << i << endl;
     
     auto scanner = [] (String auto source) -> Range <char> auto
     {
         for (auto c : source)
         {
-            cout << c << endl;
+//            cout << c << endl;
         }
         return str;
     };
     
 //    scanner ("hej");
-    cout << "hi" << endl;
+//    cout << "hi" << endl;
     
 
 //    std::cout << kiss.i << std::endl;
