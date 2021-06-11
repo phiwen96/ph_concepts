@@ -10,25 +10,7 @@
  */
 
 
-//template <typename T>
-//concept Boolean = requires () {
-//    {T::value} -> same_as <bool>;
-////    {typename T::value_type} -> same_as <int>;
-//};
-
-struct AA
+namespace ph::typetraits
 {
     
-    static inline bool value = 10;
-    
-};
-
-//static_assert (concepts::type_traits::Boolean <AA>, "");
-
-
-
-
-
-//template <typename T>
-//concept Type_trait
-
+}

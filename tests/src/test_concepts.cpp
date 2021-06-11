@@ -11,6 +11,7 @@
 #include <ph_concepts/common.hpp>
 #include <ph_concepts/memory.hpp>
 #include <ph_concepts/algorithm.hpp>
+#include <boost/spirit/include/qi.hpp>
 //#include <ph_concepts/variant.hpp>
 
 //#include <ph_concepts/types.hpp>
@@ -291,6 +292,10 @@ concept Shift_reduce_parser = requires (T& t)
 
 TEST_CASE ("app")
 {
+    std::string str = "foobar";
+    
+    cout << str.starts_with("foo") << endl; // true
+//    cout << *p << endl;
 //    String auto inp = "
     
 //    auto tokens = {NUMBER, PLUS, NUMBER};
@@ -338,7 +343,7 @@ TEST_CASE ("app")
         {
 //            cout << c << endl;
         }
-        return str;
+//        return str;
     };
     
 //    scanner ("hej");

@@ -28,6 +28,10 @@ endmacro ()
 ph_add_test (concepts)
 ph_add_test (uni)
 ph_add_test (vari)
+ph_add_test (typelist)
+ph_add_test (typetraits)
+
+
 
 
 
