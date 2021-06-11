@@ -26,6 +26,10 @@ endmacro ()
 
 
 ph_add_test (concepts)
+ph_add_test (uni)
+ph_add_test (vari)
+
+
 
 # target_link_libraries (test_${PROJECT_NAME}_algorithms PRIVATE ${PROJECT_NAME} Catch2::Catch2 ph::color)
 # target_include_directories (test_${PROJECT_NAME}_algorithms PRIVATE include ph::color)

@@ -11,7 +11,7 @@
 #include <ph_concepts/common.hpp>
 #include <ph_concepts/memory.hpp>
 #include <ph_concepts/algorithm.hpp>
-#include <ph_concepts/variant.hpp>
+//#include <ph_concepts/variant.hpp>
 
 //#include <ph_concepts/types.hpp>
 
@@ -286,13 +286,7 @@ concept Shift_reduce_parser = requires (T& t)
 };
 
 
-TEST_CASE ("variant")
-{
-    cout << "yooo" << endl;
-    auto v0 = _uni <std::string, int, double> {"hej"};
-    auto v1 = _uni <std::string, float, std::string> {6.8f};
-//    v1 = 5;
-}
+
 
 
 TEST_CASE ("app")
