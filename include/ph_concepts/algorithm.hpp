@@ -2,7 +2,13 @@
 #include "concepts.hpp"
 #include "iterator.hpp"
 #include "common.hpp"
-#include "types.hpp"
+#include "typeinfo.hpp"
+
+#define forward(x) std::forward <decltype (x)> (x)
+#define declval(T) std::declval <T> ()
+#define decay(T) std::decay_t <T>
+
+
 
 namespace ph
 {
@@ -23,7 +29,7 @@ namespace ph
     
         /// Iterating over a sequence
         auto for_each (ph::Range auto&& r, auto&& callable) -> void
-        requires requires (ph::element_access_type_of <decltype (r)> e) {
+        requires requires (ph::typeinfo::range::access_type <decltype (r)> e) {
             callable (forward (e));
         }
         {
@@ -58,7 +64,7 @@ namespace ph
     
     template <typename T>
     auto contains (ph::Range auto&& r, auto&& element)
-    requires requires (element_access_type_of <decltype (r)> e)
+    requires requires (ph::typeinfo::range::access_type <decltype (r)> e)
     {
         {e == element} -> Boolean;
     }
@@ -75,7 +81,7 @@ namespace ph
     }
     
     auto count_if (ph::Range auto&& r, auto&& callable) -> Size auto
-    requires requires (element_access_type_of <decltype (r)> e) {
+    requires requires (ph::typeinfo::range::access_type <decltype (r)> e) {
         {callable (forward (e))} -> Boolean;
     }
     {
@@ -93,7 +99,7 @@ namespace ph
     }
     
     auto count (ph::Range auto&& r, auto&& element) -> Size auto
-    requires requires (element_access_type_of <decltype (r)> e) {
+    requires requires (ph::typeinfo::range::access_type <decltype (r)> e) {
         {e == element} -> Boolean;
     }
     {
@@ -111,7 +117,7 @@ namespace ph
     }
     
     auto find (ph::Range auto&& r, auto&& element) -> ph::Iterator auto
-    requires requires (element_access_type_of <decltype (r)> i) {
+    requires requires (ph::typeinfo::range::access_type <decltype (r)> i) {
         {i == element} -> Boolean;
     }
     {
@@ -129,7 +135,7 @@ namespace ph
     }
     
     auto find_if (ph::Range auto&& r, auto&& callable) -> ph::Iterator auto
-    requires requires (element_access_type_of <decltype (r)> i) {
+    requires requires (ph::typeinfo::range::access_type <decltype (r)> i) {
         {callable (forward (i))} -> Boolean;
     }
     {
@@ -151,3 +157,6 @@ namespace ph
     
 }
 
+#undef forward
+#undef declval
+#undef decay

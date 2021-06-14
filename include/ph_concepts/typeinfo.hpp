@@ -2,7 +2,11 @@
 #include "concepts.hpp"
 #include "common.hpp"
 
-namespace ph
+#define forward(x) std::forward <decltype (x)> (x)
+#define declval(T) std::declval <T> ()
+#define decay(T) std::decay_t <T>
+
+namespace ph::typeinfo
 {
     template <typename T>
     using add_pointer = T*;
@@ -38,29 +42,37 @@ namespace ph
     
     
     
-    template <ph::Range R>
-    struct range
+//    template <ph::Range R>
+    namespace range
     {
+        template <ph::Range R>
         using iterator_type = decltype (ph::begin (declval (R)));
+        
+        template <ph::Range R>
         using access_type = decltype (*ph::begin (declval (R)));
-        using element_type = decay (access_type);
+        
+        template <ph::Range R>
+        using element_type = decay (access_type <R>);
     };
     
     
     
-    template <ph::Range R>
-    using element_access_type_of = typename range <R>::access_type;
+//    template <ph::Range R>
+//    using element_access_type_of = typename range <R>::access_type;
     
-    template <ph::Range R>
-    using element_type_of = typename range <R>::element_type;
+//    template <ph::Range R>
+//    using element_type_of = typename range <R>::element_type;
     
 //    template <ph::Iterator I>
 //    using element_type_of = typename range <I>::element_type;
     
-    template <ph::Range R>
-    using iterator_type_of = typename range <R>::iterator_type;
+//    template <ph::Range R>
+//    using iterator_type_of = typename range <R>::iterator_type;
     
     
     
 }
 
+#undef forward
+#undef declval
+#undef decay

@@ -372,11 +372,7 @@ X (std::nullptr_t)
     
     
     
-    template <typename T>
-    struct typeinfo
-    {
-        
-    };
+  
     
     
     

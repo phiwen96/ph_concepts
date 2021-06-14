@@ -11,7 +11,6 @@
 #include <ph_concepts/common.hpp>
 #include <ph_concepts/memory.hpp>
 #include <ph_concepts/algorithm.hpp>
-#include <boost/spirit/include/qi.hpp>
 //#include <ph_concepts/variant.hpp>
 
 //#include <ph_concepts/types.hpp>
@@ -34,10 +33,10 @@ concept Compiler = requires (Comp& comp)
 };
 #endif
 
-auto tes (ph::Darwin auto d)
-{
-    
-}
+//auto tes (ph::Darwin auto d)
+//{
+//    
+//}
 
 TEST_CASE ()
 {
@@ -243,9 +242,9 @@ auto vm (Range <OPCODE> auto a)
 }
 
 
-auto push_bytes () {
-    
-}
+//auto push_bytes () {
+//    
+//}
 
 
 
