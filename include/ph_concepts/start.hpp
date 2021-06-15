@@ -6,6 +6,7 @@
 #include <experimental/coroutine>
 #include "typeinfo.hpp"
 #include "concepts.hpp"
+#include "experimenting.hpp"
 
 using namespace std::experimental;
 
@@ -235,10 +236,20 @@ auto branch_if_grater_or_equal_than (Register auto&& op_0, Register auto&& op_1,
     ////////////////////////////////////////////////////
     ///  uconditional branch instructions
     ///
-    /// @param dst is the return address
+    /// @param dst is a register holding the return address
     /// @param procedure is the procedure to jump to
+    ///
+    /// An
+    // instruction that branches
+    // to an address and
+    // simultaneously saves the
+    // address of the following
+    // instruction in a register
+    // (usually x1 in RISC-V).
+///
+///jal x1, ProcedureAddress // jump to ProcedureAddress and write return address to x1
     ///////////////////////////////////////////////////////
-auto jump_and_link (Register auto&& dst, auto&& procedure) -> void
+auto jump_and_link (Register auto&& ret_addr_reg, auto&& procedure) -> void
 {
     
 }
@@ -347,6 +358,7 @@ private:
 
 struct alignas (8/*64 bits*/) instruction
 {
+    
 //    int a : 1 = 0;
     
     /**
@@ -415,29 +427,71 @@ private:
 };
 
 
+namespace ph::experimenting
+{
+    template <int>
+    auto test (signed);
+    
+    template <>
+    auto test <0> (signed loops)
+    {
+        ph::common::ScopedTimer t {"test 0"};
+        
+        for (int i = 0; i < loops; ++i)
+        {
+            auto lhs = new NumberExpression {10};
+            auto rhs = new NumberExpression {10};
+            auto expr = new AdditionExpression {lhs, rhs};
+            
+            delete lhs;
+            delete rhs;
+            delete expr;
+        }
+    }
+    
+    template <>
+    auto test <1> (signed loops)
+    {
+        ph::common::ScopedTimer t {"test 0"};
 
+        int a[10];
+        a[0] = Instruction::PUSH_INDENT;
+        a[1] = Instruction::PRINT_VALUE;
+        a[2] = 10;
+        a[3] = Instruction::POP_INDENT;
+        a[4] = Instruction::PRINT_VALUE;
+        a[5] = 10;
+        
+    }
+    
+    template <>
+    auto test <2> (signed loops)
+    {
+        
+    }
+    
+    auto start () -> int
+    {
+//        test <0> (10000000);
+        test <1> (10000000);
+        test <2> (10000000);
+        
+        
+        return 0;
+    }
+}
 
 
 
 auto start () -> int
 {
+    ph::experimenting::start ();
+    
+    
     using namespace std;
+    cout << "" << setw (5) << "hej" << endl;
+    cout << "" << setw (10) << "hej" << endl;
 
-    
-    auto r0 = registeer {};
-    auto r1 = registeer {};
-    
-    
-    r0 = 3;
-    r1 = 3;
-    
-    assert (r0 == r1);
-    
-    
-
-    
-    
-    
     return 0;
 }
 #undef EAT_NOT
