@@ -449,18 +449,43 @@ namespace ph::experimenting
         }
     }
     
+    struct next
+    {
+        next (int i) : i {i}, j {i}
+        {
+            
+        }
+        operator size_t ()
+        {
+            if (++i == j)
+            {
+                throw std::runtime_error ("");
+            }
+            return i;
+        }
+    private:
+        int i;
+        int j;
+    };
+    
     template <>
     auto test <1> (signed loops)
     {
         ph::common::ScopedTimer t {"test 0"};
 
+        auto nex = next {10};
+        
         int a[10];
-        a[0] = Instruction::PUSH_INDENT;
-        a[1] = Instruction::PRINT_VALUE;
-        a[2] = 10;
-        a[3] = Instruction::POP_INDENT;
-        a[4] = Instruction::PRINT_VALUE;
-        a[5] = 10;
+//        a[0] = Instruction::PUSH_INDENT;
+        a[0] = Instruction::PUSH_VALUE;
+        a[1] = 10;
+        a[2] = Instruction::PRINT_VALUE;
+        a[3] = Instruction::DONE;
+//        a[2] = 10;
+//        a[3] = Instruction::POP_INDENT;
+//        a[4] = Instruction::PRINT_VALUE;
+//        a[5] = 10;
+        auto b = ph::experimenting::VM {a};
         
     }
     
@@ -474,7 +499,7 @@ namespace ph::experimenting
     {
 //        test <0> (10000000);
         test <1> (10000000);
-        test <2> (10000000);
+//        test <2> (10000000);
         
         
         return 0;
@@ -489,8 +514,8 @@ auto start () -> int
     
     
     using namespace std;
-    cout << "" << setw (5) << "hej" << endl;
-    cout << "" << setw (10) << "hej" << endl;
+//    cout << "" << setw (5) << "hej" << endl;
+//    cout << "" << setw (10) << "hej" << endl;
 
     return 0;
 }
