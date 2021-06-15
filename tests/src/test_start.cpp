@@ -16,5 +16,5 @@
 
 TEST_CASE ("")
 {
-//    start ();
+    start ();
 }
