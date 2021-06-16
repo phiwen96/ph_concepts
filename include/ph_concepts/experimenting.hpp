@@ -61,84 +61,36 @@ namespace ph::experimenting
     
     enum Instruction
     {
-        ERROR = 0x00,
-//        INST_SET_HEALTH      = 0x00,
-        INST_SET_WISDOM      = 0x01,
-        INST_SET_AGILITY     = 0x02,
-        INST_PLAY_SOUND      = 0x03,
-        INST_SPAWN_PARTICLES = 0x04,
-        PUSH_INDENT = 0x05,
-        PRINT_VALUE = 0x06,
-        POP_INDENT = 0x08,
-        PUSH_VALUE = 0x09,
-        DONE = 0x10
+        ERROR,
+        PUSH_INDENT,
+        PRINT_VALUE,
+        POP_INDENT,
+        PUSH_VALUE,
+        INC_VALUE,
+        DEC_VALUE,
+        DONE,
+        PUSH_STRING,
+        NEGATE_VALUE,
+        ADD_VALUES
     };
     
+    
+    auto const next = [i = 0]{};
     
     class VM
     {
     public:
-        VM (int a[10]) : stackSize_(0) {
-            for (int i = 0; i < 10 and a [i] != DONE; ++i)
-            {
-                switch (a[i])
-                {
-                    case DONE:
-                    {
-                        std::cout << "DONE" << std::endl;
-                        break;
-                    }
-                        
-                    case ERROR:
-                    {
-                        throw std::runtime_error ("!");
-                        break;
-                    }
-                        
-                    case PUSH_INDENT:
-                    {
-                        std::cout << "PUSH_INDENT" << std::endl;
-
-                        indent += 4;
-                        break;
-                    }
+        VM (int a [10]) : stackSize_(0) {
             
-                    case POP_INDENT:
-                    {
-                        std::cout << "POP_INDENT" << std::endl;
-
-                        indent -= 4;
-                        break;
-                    }
-                        
-                    case PUSH_VALUE:
-                    {
-                        std::cout << "PUSH_VALUE" << std::endl;
-
-                        push (a [i+1]);
-                        break;
-                    }
-                        
-                    case PRINT_VALUE:
-                    {
-                        std::cout << "PRINT_VALUE " << pop () << std::endl;
-                        
-                        break;
-                    }
-                        
-                    default:
-                    {
-                        break;
-                    }
-                }
-            }
+            run (a);
+          
         }
         
             // Other stuff...
         
     private:
         static const int MAX_STACK = 128;
-        int stackSize_;
+        int stackSize_ {0};
         int stack_[MAX_STACK];
         
         int indent {0};
@@ -150,11 +102,127 @@ namespace ph::experimenting
             stack_[stackSize_++] = value;
         }
         
-        int pop()
+        int& pop()
+        {
+                // Make sure the stack isn't empty.
+//            assert(stackSize_ > 0);
+            return stack_[--stackSize_];
+        }
+        
+        int& top()
         {
                 // Make sure the stack isn't empty.
             assert(stackSize_ > 0);
-            return stack_[--stackSize_];
+            return stack_[stackSize_ - 1];
+        }
+
+        
+        void run (int a [30])
+        {
+            
+            for (int i = 0; i < 30; ++i)
+            {
+                switch (a [i])
+                {
+                    case DONE:
+                    {
+                        std::cout << "DONE" << std::endl;
+                        i = 30;
+                        break;
+                    }
+                        
+                    case ERROR:
+                    {
+                        std::cout << "PUSH_INDENT" << std::endl;
+
+//                        throw std::runtime_error ("!");
+                        break;
+                    }
+                        
+                    case PUSH_INDENT:
+                    {
+//                        std::cout << "PUSH_INDENT" << std::endl;
+                        
+//                        indent += 4;
+                        break;
+                    }
+                        
+                    case POP_INDENT:
+                    {
+//                        std::cout << "POP_INDENT" << std::endl;
+                        
+//                        indent -= 4;
+                        break;
+                    }
+                        
+                    case NEGATE_VALUE:
+                    {
+                        std::cout << "NEGATE_VALUE" << std::endl;
+                        top() *= -1;
+//                        indent -= 4;
+                        break;
+                    }
+                        
+                    case PUSH_STRING:
+                    {
+                        break;
+                    }
+                        
+                    case PUSH_VALUE:
+                    {
+                        push (a [i + 1]);
+                        ++i;
+//                        value = *(++begin);
+                        
+                        std::cout << "PUSH_VALUE " << top() << std::endl;
+                        
+//                        push (value);
+//                        push ();
+//                        ++begin;
+                        break;
+                    }
+                        
+                    case PRINT_VALUE:
+                    {
+                        
+                        std::cout << "PRINT_VALUE " << top () << std::endl;
+                        
+                        break;
+                    }
+                        
+                    case ADD_VALUES:
+                    {
+                        
+//                        std::cout << "ADD_VALUES " << push(pop()) << std::endl;
+                        
+                        
+                        break;
+                    }
+                        
+                    case INC_VALUE:
+                    {
+                        ++top();
+//                        int& value = * (begin - 1);
+                        
+//                        ++value;
+                        
+                        std::cout << "INC_VALUE " << std::endl;
+//                        *(begin+1) += 1;
+                        
+                        
+                        break;
+                    }
+                        
+                    default:
+                    {
+                        break;
+                    }
+                }
+            
+            }
+        Exit:{
+            
+        }
         }
     };
 }

@@ -449,31 +449,35 @@ namespace ph::experimenting
         }
     }
     
-    struct next
-    {
-        next (int i) : i {i}, j {i}
+    EAT ({
+        struct next
         {
-            
-        }
-        operator size_t ()
-        {
-            if (++i == j)
+            next (int i) : i {i}, j {i}
             {
-                throw std::runtime_error ("");
+
             }
-            return i;
-        }
-    private:
-        int i;
-        int j;
-    };
+            operator size_t ()
+            {
+                if (++i == j)
+                {
+                    throw std::runtime_error ("");
+                }
+                return i;
+            }
+        private:
+            int i;
+            int j;
+        };
+    })
+    
+#define TEST_FUNCTION [] (int o) {return o + 1;}
     
     template <>
     auto test <1> (signed loops)
     {
         ph::common::ScopedTimer t {"test 0"};
 
-        auto nex = next {10};
+//        auto nex = next {10};
         
         int a[10];
 //        a[0] = Instruction::PUSH_INDENT;
@@ -485,8 +489,69 @@ namespace ph::experimenting
 //        a[3] = Instruction::POP_INDENT;
 //        a[4] = Instruction::PRINT_VALUE;
 //        a[5] = 10;
-        auto b = ph::experimenting::VM {a};
+//        auto b = ph::experimenting::VM {a};
         
+    }
+    
+    
+    
+    auto cpp_vs_vm (signed loops)
+    {
+        long long p;
+        {
+            auto next = [i = 30] (auto&&...) mutable
+            {
+                if (i == 0)
+                    throw;
+                
+                return 30 - std::exchange (i, i - 1);
+            };
+//            std::cout << next() << std::endl;
+//            std::cout << next() << std::endl;
+            
+//            next
+            
+            ph::common::ScopedTimer t {"cpp"};
+            for (int i = 0; i < loops; ++i)
+            {
+                int a[30];
+//                a
+        //        a[0] = Instruction::PUSH_INDENT;
+                a[next()] = Instruction::PUSH_VALUE;
+                a[next()] = 20;
+                a[next()] = Instruction::INC_VALUE;
+                a[next()] = Instruction::PRINT_VALUE;
+                
+                a[next()] = Instruction::PUSH_VALUE;
+                a[next()] = -20;
+                a[next()] = Instruction::INC_VALUE;
+                a[next()] = Instruction::NEGATE_VALUE;
+                a[next()] = Instruction::PRINT_VALUE;
+//
+                a[next()] = Instruction::ADD_VALUES;
+                a[next()] = Instruction::PRINT_VALUE;
+                
+                a[next()] = Instruction::DONE;
+    //            a[4] = Instruction::DONE;
+                
+                
+                auto da = ph::experimenting::VM {a};
+//                int* k = new int {6};
+//                delete k;
+                ++p;
+            }
+        }
+        
+        {
+            ph::common::ScopedTimer t {"vm"};
+
+            for (int i = 0; i < loops; ++i)
+            {
+                int k = TEST_FUNCTION (10);
+                ++p;
+            }
+        }
+//        std::cout << p << std::endl;
     }
     
     template <>
@@ -498,7 +563,8 @@ namespace ph::experimenting
     auto start () -> int
     {
 //        test <0> (10000000);
-        test <1> (10000000);
+        cpp_vs_vm (1);
+//        test <1> (10000000);
 //        test <2> (10000000);
         
         
