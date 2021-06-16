@@ -477,95 +477,96 @@ namespace ph::experimenting
     {
         ph::common::ScopedTimer t {"test 0"};
 
-//        auto nex = next {10};
-        
-        int a[10];
-//        a[0] = Instruction::PUSH_INDENT;
-        a[0] = Instruction::PUSH_VALUE;
-        a[1] = 10;
-        a[2] = Instruction::PRINT_VALUE;
-        a[3] = Instruction::DONE;
-//        a[2] = 10;
-//        a[3] = Instruction::POP_INDENT;
-//        a[4] = Instruction::PRINT_VALUE;
-//        a[5] = 10;
-//        auto b = ph::experimenting::VM {a};
-        
-    }
-    
-    
-    
-    auto cpp_vs_vm (signed loops)
-    {
-        long long p;
+
+        auto next = [i = 30] (auto&&...) mutable
         {
-            auto next = [i = 30] (auto&&...) mutable
-            {
-                if (i == 0)
-                    throw;
-                
-                return 30 - std::exchange (i, i - 1);
-            };
-//            std::cout << next() << std::endl;
-//            std::cout << next() << std::endl;
+            if (i == 0)
+                throw;
             
+            return 30 - std::exchange (i, i - 1);
+        };
+//            std::cout << next() << std::endl;
+//            std::cout << next() << std::endl;
+        
 //            next
-            
-            ph::common::ScopedTimer t {"cpp"};
-            for (int i = 0; i < loops; ++i)
-            {
-                int a[30];
+        
+        for (int i = 0; i < loops; ++i)
+        {
+            int a[30];
 //                a
-        //        a[0] = Instruction::PUSH_INDENT;
-                a[next()] = Instruction::PUSH_VALUE;
-                a[next()] = 20;
-                a[next()] = Instruction::INC_VALUE;
-                a[next()] = Instruction::PRINT_VALUE;
-                
-                a[next()] = Instruction::PUSH_VALUE;
-                a[next()] = -20;
-                a[next()] = Instruction::INC_VALUE;
-                a[next()] = Instruction::NEGATE_VALUE;
-                a[next()] = Instruction::PRINT_VALUE;
+    //        a[0] = Instruction::PUSH_INDENT;
+            a[next()] = Instruction::PUSH_VALUE;
+            a[next()] = 20;
+            a[next()] = Instruction::INC_VALUE;
+            a[next()] = Instruction::PRINT_VALUE;
+            
+            a[next()] = Instruction::PUSH_VALUE;
+            a[next()] = -20;
+            a[next()] = Instruction::INC_VALUE;
+            a[next()] = Instruction::NEGATE_VALUE;
+            a[next()] = Instruction::PRINT_VALUE;
 //
-                a[next()] = Instruction::ADD_VALUES;
-                a[next()] = Instruction::PRINT_VALUE;
-                
-                a[next()] = Instruction::DONE;
-    //            a[4] = Instruction::DONE;
-                
-                
-                auto da = ph::experimenting::VM {a};
+            a[next()] = Instruction::ADD_VALUES;
+            a[next()] = Instruction::PRINT_VALUE;
+            
+            a[next()] = Instruction::DONE;
+//            a[4] = Instruction::DONE;
+            
+            
+            auto da = ph::experimenting::VM {a};
 //                int* k = new int {6};
 //                delete k;
-                ++p;
-            }
+        
         }
         
-        {
-            ph::common::ScopedTimer t {"vm"};
-
-            for (int i = 0; i < loops; ++i)
-            {
-                int k = TEST_FUNCTION (10);
-                ++p;
-            }
-        }
-//        std::cout << p << std::endl;
     }
     
     template <>
     auto test <2> (signed loops)
     {
+        auto a = ph::experimenting::scanner {"2+3"};
+        
+        auto b = (std::vector <ph::experimenting::Token>) a;
+        
+        for (auto& i : b)
+        {
+//            std::cout << i << std::endl;
+        }
+    }
+    
+    
+    template <>
+    auto test <3> (signed)
+    {
+        auto scanner = ph::experimenting::scanner {"5-(2+3)+4-7"};
+        
+        auto tokens = (std::vector <ph::experimenting::Token>) scanner;
+//        tokens.push_back (ph::experimenting::Token::)
+//        std::cout << b.size()<<std::endl;
+        
+        
+        
+        auto parser = ph::experimenting::parser {tokens};
+        
+        while (parser.code.stackSize > 0)
+        {
+            std::cout << parser.code.top() << std::endl;
+            parser.code.pop();
+        }
+//        auto vm = ph::experimenting::VM {parser.code.stack};
+        
+        return;
+
         
     }
     
+    
+    
+   
+    
     auto start () -> int
     {
-//        test <0> (10000000);
-        cpp_vs_vm (1);
-//        test <1> (10000000);
-//        test <2> (10000000);
+        test <3> (1);
         
         
         return 0;

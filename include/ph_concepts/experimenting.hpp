@@ -2,6 +2,8 @@
 
 #include "common.hpp"
 #include "concepts.hpp"
+#include <list>
+#include <queue>
 
 
 namespace ph::experimenting
@@ -117,17 +119,17 @@ namespace ph::experimenting
         }
 
         
-        void run (int a [30])
+        void run (int a [128])
         {
             
-            for (int i = 0; i < 30; ++i)
+            for (int i = 0; i < 128; ++i)
             {
                 switch (a [i])
                 {
                     case DONE:
                     {
                         std::cout << "DONE" << std::endl;
-                        i = 30;
+                        i = 128;
                         break;
                     }
                         
@@ -223,6 +225,223 @@ namespace ph::experimenting
         Exit:{
             
         }
+        }
+    };
+}
+
+namespace ph::experimenting
+{
+    struct Token
+    {
+        enum
+        {
+            PLUS,
+            MINUS,
+            NUMBER,
+            LPAREN,
+            RPAREN,
+            END
+        } type;
+        char const* begin;
+        char const* end;
+    };
+    struct scanner
+    {
+        char const* s;
+        scanner (char const* s) : s {s}
+        {
+
+        }
+        
+        operator std::vector <Token> ()
+        {
+            auto res = std::vector <Token> {};
+            for (auto i = s; i < s + strlen (s); ++i)
+            {
+                if (*i == '+')
+                {
+                    res.push_back(Token{Token::PLUS, i, i + 1});
+
+                } else if (*i == '-')
+                {
+                    res.push_back(Token{Token::MINUS, i, i + 1});
+
+                } else if (*i == '(')
+                {
+                        res.push_back(Token{Token::LPAREN, i, i + 1});
+
+                } else if (*i == ')')
+                {
+                            res.push_back(Token{Token::RPAREN, i, i + 1});
+
+                } else if (isdigit(*i))
+                {
+                            res.push_back(Token{Token::NUMBER, i, i + 1});
+
+                } else
+                {
+                    
+                }
+            }
+            return res;
+        }
+        
+    private:
+        
+    };
+}
+
+
+namespace ph::experimenting
+{
+    struct parser
+    {
+        struct
+        {
+            int stackSize {0};
+            int stack [128];
+            
+            void push(int value)
+            {
+                    // Check for stack overflow.
+                assert(stackSize < 128);
+                stack[stackSize++] = value;
+            }
+            
+            int& pop()
+            {
+                    // Make sure the stack isn't empty.
+    //            assert(stackSize > 0);
+                return stack[--stackSize];
+            }
+            
+            int& top()
+            {
+                    // Make sure the stack isn't empty.
+                assert(stackSize > 0);
+                return stack[stackSize - 1];
+            }
+        } code;
+        
+        struct
+        {
+            int stackSize {0};
+            int stack [128];
+            
+            void push(int value)
+            {
+                    // Check for stack overflow.
+                assert(stackSize < 128);
+                stack[stackSize++] = value;
+            }
+            
+            int& pop()
+            {
+                    // Make sure the stack isn't empty.
+    //            assert(stackSize > 0);
+                return stack[--stackSize];
+            }
+            
+            int& top()
+            {
+                    // Make sure the stack isn't empty.
+                assert(stackSize > 0);
+                return stack[stackSize - 1];
+            }
+        } stack;
+        
+        
+        
+        std::queue <std::function<void()>> queue;
+        
+        
+        
+        parser (std::vector <ph::experimenting::Token>& tokens)
+        {
+            for (auto i = tokens.begin(); i < tokens.end(); ++i)
+            {
+                if (not queue.empty())
+                {
+                    queue.front()();
+                    if (i >= tokens.end())
+                    {
+                        break;
+                    }
+                }
+                
+                switch (i->type)
+                {
+                    case Token::NUMBER:
+                    {
+                        stack.push (std::stod (std::string {i->begin, i->begin + 1}));
+                        std::cout << "Token::NUMBER\n";
+                        break;
+                    }
+                        
+                    case Token::PLUS:
+                    {
+                        code.push (stack.pop());
+                        queue.push ([&]()
+                        {
+                            if (i->type == Token::NUMBER)
+                            {
+                                code.push (std::stod (std::string {i->begin, i->begin + 1}));
+                                
+                                ++i;
+
+                            } else
+                            {
+                                queue.pop();
+                                if (not queue.empty())
+                                {
+                                    queue.front()();
+                                }
+                            }
+                        });
+                        std::cout << "Token::PLUS\n";
+                        break;
+                    }
+                        
+                    case Token::MINUS:
+                    {
+                        std::cout << "Token::MINUS\n";
+                        break;
+                    }
+                        
+                    case Token::LPAREN:
+                    {
+                        queue.push ([&]()
+                        {
+                            if (i->type == Token::RPAREN)
+                            {
+                                queue.pop();
+                                
+                                if (not queue.empty())
+                                {
+                                    queue.front()();
+                                }
+                            }
+                        });
+                        std::cout << "Token::LPAREN\n";
+                        break;
+                    }
+                        
+    
+                    default:
+                        break;
+                }
+            }
+            
+            
+        }
+        
+    private:
+        
+        
+        
+        auto group () -> void
+        {
+            
         }
     };
 }
