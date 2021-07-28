@@ -69,12 +69,12 @@ target_compile_features (${self} PUBLIC cxx_std_20)
 #     custom_header_target
 #     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
 # )
-ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch} ${boost_pch})
+ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch})
 
 add_library (ph::concepts ALIAS ph_concepts)
-target_link_libraries (ph_concepts PRIVATE ${Boost_LIBRARIES})
+# target_link_libraries (ph_concepts PRIVATE ${Boost_LIBRARIES})
 target_include_directories (ph_concepts PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_include_directories (ph_concepts PRIVATE ${Boost_INCLUDE_DIRS})
+# target_include_directories (ph_concepts PRIVATE ${Boost_INCLUDE_DIRS})
 
 target_compile_features (ph_concepts PUBLIC cxx_std_20)
 
