@@ -2,13 +2,10 @@
     //#include <map>
     //#include <unordered_map>
     //#include "common.hpp"
-    //using namespace std;
+//    using namespace std;
 
 namespace ph
 {
-    
-    
-    
     
     template <typename T, typename... U>
     concept same_as_any_of = (std::is_same_v <T, U> or ...);
@@ -218,9 +215,9 @@ X (std::nullptr_t)
     
         //auto len (void)
     
-    constexpr auto begin (Pointer auto p) -> Iterator auto
+    constexpr auto begin (Pointer auto&& p) -> Iterator auto
     {
-        return forward (p);
+        return std::forward<decltype (p)> (p);
     };
     
     
