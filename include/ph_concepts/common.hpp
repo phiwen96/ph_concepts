@@ -1,7 +1,7 @@
 #pragma once
-namespace ph::common
+namespace ph
 {
-    
+    inline namespace concepts {
 #define EAT(...)
     
     
@@ -33,4 +33,25 @@ namespace ph::common
         const ClockType::time_point start_{};
     };
     
+    
+    template <typename T, typename... U>
+    concept same_as_any_of = (std::is_same_v <T, U> or ...);
+
+    template <typename A, typename B>
+    concept same_as = requires (){
+        requires std::is_same_v <A, B>;
+    };
+
+
+    template <typename From, typename To>
+    concept convertible_to = requires (){
+        requires std::is_convertible_v <From, To>;
+    };
+    
 }
+
+}
+
+
+
+

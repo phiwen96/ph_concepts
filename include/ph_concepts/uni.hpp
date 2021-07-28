@@ -10,7 +10,7 @@ union uni
     T t;
     uni <U...> rest;
     
-    constexpr uni (auto&& e)
+    constexpr uni (auto&& e) noexcept
     requires requires () {T {forward (e)};}
     : t {forward (e)}
     {
@@ -18,26 +18,26 @@ union uni
     }
     
     
-    constexpr uni (auto&& e)
+    constexpr uni (auto&& e) noexcept
     requires (... or std::is_constructible_v <U, decltype (e)>)
-    : rest {forward (e)}
+    : rest {std::forward <decltype (e)> (e)}
     {
 
     }
     
-    constexpr uni ()
+    constexpr uni () noexcept
     requires (std::is_trivially_default_constructible_v<T>)
     = default;
     
     
-    constexpr uni ()
+    constexpr uni () noexcept
     requires (not std::is_trivially_default_constructible_v<T>)
     : t {}
     {
         
     }
     
-    ~uni ()
+    ~uni () noexcept
     requires (not std::is_trivially_destructible_v<T>)
     {
         
