@@ -53,22 +53,6 @@ set (self ${PROJECT_NAME})
 set_target_properties (${self} PROPERTIES CXX_STANDARD 20)
 target_compile_features (${self} PUBLIC cxx_std_20)
 
-# file (GLOB CONFIGS ${PROJECT_SOURCE_DIR}/src/in/*.hpp)
-# foreach (file ${CONFIGS})
-# 	get_filename_component (name ${file} NAME)
-# 	# message ("hej ${file}")
-# 	configure_file (${file} ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/${name} @ONLY)
-# endforeach ()
-# add_custom_command(
-#     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
-#     COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/custom_header.h.in ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
-#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/custom_header.h.in
-# )
-
-# add_custom_target(
-#     custom_header_target
-#     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/custom_header.h
-# )
 ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch})
 
 add_library (ph::concepts ALIAS ph_concepts)
