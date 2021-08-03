@@ -2,12 +2,13 @@
 
 
 
-set (include_dir "${CMAKE_CURRENT_LIST_DIR}/../include/ph_concepts")
-set (src_dir "${CMAKE_CURRENT_LIST_DIR}")
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/../include/${CMAKE_PROJECT_NAME}/*.hpp")
+file(GLOB SOURCE_LIST CONFIGURE_DEPENDS "*.cpp")
 
-ph_create_modules (
 
-	MODULES 
+Create_cpp_files (
+
+	FILES 
 		"concepts"
 		"common"
 		"Floating"
@@ -30,19 +31,28 @@ ph_create_modules (
 		"Array"
 		"uni"
 
-	INCLUDE
-		"${include_dir}"
+	INCLUDE_DIR
+		"../include/${CMAKE_PROJECT_NAME}"
 
-	SRC 
-		"${src_dir}"
+	SRC_DIR
+		"${CMAKE_CURRENT_LIST_DIR}"
 )
 
-file(GLOB_RECURSE HEADER_LIST "${include_dir}/*.hpp")
-file(GLOB SOURCE_LIST "${src_dir}/*.cpp")
+
+
+foreach (file IN LISTS ${HEADER_LIST})
+message(${file})
+message("kuk")
+	# set_target_properties(${file}          PROPERTIES FOLDER "${PROJECT_NAME}/include/kuk${name}")
+endforeach ()
+
 
 add_library (ph_concepts
 	${SOURCE_LIST}  ${HEADER_LIST} 
 )
+
+
+
 
 target_compile_definitions (${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:DEBUG> $<$<CONFIG:RELEASE>:RELEASE>")
 
@@ -76,7 +86,9 @@ target_include_directories(ph_concepts PUBLIC
 )
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
+    set_target_properties(${PROJECT_NAME}          PROPERTIES FOLDER "main")
 else()
     set_target_properties(${PROJECT_NAME}          PROPERTIES FOLDER "dependencies")
 endif()
+
+IDE()

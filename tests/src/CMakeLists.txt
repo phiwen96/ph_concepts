@@ -18,17 +18,32 @@ file(GLOB SOURCE_LIST *.cpp)
 
 # set (deps )
 macro (ph_add_test name)
-	add_executable (test_${name} testlib.cpp test_${name}.cpp ${HEADER_LIST})
+	add_executable (test_${name} test_${name}.cpp ${HEADER_LIST})
+	# set_target_properties(test_${name}          PROPERTIES FOLDER "main/${PROJECT_NAME}/tests")
+	# source_group (bajs//kiss test_${name}.cpp)
+	source_group(TREE ${CMAKE_CURRENT_LIST_DIR}
+            PREFIX "sources"               
+            FILES  test_${name}.cpp
+        )
+	# set_target_properties(test_${name} PROPERTIES PROJECT_LABEL "test_${name}Foo Tastic")
 	target_link_libraries (test_${name} PRIVATE ph::concepts ${PROJECT_NAME} Catch2::Catch2)
 	target_include_directories (test_${name} PRIVATE ph::concepts ../include)
 	ph_precompile (TARGET test_${name} PRIVATE PCH ${std_pch})
 
 	if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-		set_target_properties(test_${name}          PROPERTIES FOLDER "${PROJECT_NAME}")
+		set_target_properties(test_${name}          PROPERTIES FOLDER "main/${PROJECT_NAME}/tests")
 	else ()
-		set_target_properties(test_${name}          PROPERTIES FOLDER "dependencies/${PROJECT_NAME}")
+		set_target_properties(test_${name}          PROPERTIES FOLDER "dependencies/tests/${PROJECT_NAME}")
 	endif()		
 endmacro ()
+
+Create_cpp_tests (
+	TARGETS 
+		"concepts"
+		"uni"
+		"vari"
+		"typelist"
+)
 
 ph_add_test (concepts)
 ph_add_test (uni)
