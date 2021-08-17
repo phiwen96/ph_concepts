@@ -6,45 +6,41 @@ file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/../include/${
 file(GLOB SOURCE_LIST CONFIGURE_DEPENDS "*.cpp")
 
 
-Create_cpp_files (
+# Create_cpp_files (
 
-	FILES 
-		"concepts"
-		"common"
-		"Floating"
-		"Integer"
-		"Signed"
-		"Unsigned"
-		"Number"
-		"Char"
-		"Iterator"
-		"Range"
-		"String"
-		"Integral"
-		"Arithmetic"
-		"Fundamental"
-		"Void"
-		"Pointer"
-		"Size"
-		"Function"
-		"Reference"
-		"Array"
-		"uni"
+# 	FILES 
+# 		"concepts"
+# 		"common"
+# 		"Floating"
+# 		"Integer"
+# 		"Signed"
+# 		"Unsigned"
+# 		"Number"
+# 		"Char"
+# 		"Iterator"
+# 		"Range"
+# 		"String"
+# 		"Integral"
+# 		"Arithmetic"
+# 		"Fundamental"
+# 		"Void"
+# 		"Pointer"
+# 		"Size"
+# 		"Function"
+# 		"Reference"
+# 		"Array"
+# 		"uni"
 
-	INCLUDE_DIR
-		"../include/${CMAKE_PROJECT_NAME}"
+# 	INCLUDE_DIR
+# 		"../include/${CMAKE_PROJECT_NAME}"
 
-	SRC_DIR
-		"${CMAKE_CURRENT_LIST_DIR}"
-)
+# 	SRC_DIR
+# 		"${CMAKE_CURRENT_LIST_DIR}"
+# )
 
 
 
-foreach (file IN LISTS ${HEADER_LIST})
-message(${file})
-message("kuk")
-	# set_target_properties(${file}          PROPERTIES FOLDER "${PROJECT_NAME}/include/kuk${name}")
-endforeach ()
+
 
 
 add_library (ph_concepts

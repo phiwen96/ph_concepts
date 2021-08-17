@@ -37,13 +37,13 @@ macro (ph_add_test name)
 	endif()		
 endmacro ()
 
-Create_cpp_tests (
-	TARGETS 
-		"concepts"
-		"uni"
-		"vari"
-		"typelist"
-)
+# Create_cpp_tests (
+# 	TARGETS 
+# 		"concepts"
+# 		"uni"
+# 		"vari"
+# 		"typelist"
+# )
 
 ph_add_test (concepts)
 ph_add_test (uni)
