@@ -3,9 +3,7 @@
 #include "Integer.hpp"
 #include "Char.hpp"
 
-namespace ph
-{
-    inline namespace concepts
+namespace ph::concepts
     {
 
     template <typename T>
@@ -13,5 +11,5 @@ namespace ph
         or Integer <T>
         or Char <T>;
     }
-}
+
 

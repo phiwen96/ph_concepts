@@ -26,9 +26,7 @@
 #include "common.hpp"
 
 
-namespace ph
-{
-    inline namespace concepts {
+namespace ph::concepts {
         
         
         
@@ -385,7 +383,7 @@ namespace ph
         };
         
         
-    }
+    
 }
 
 

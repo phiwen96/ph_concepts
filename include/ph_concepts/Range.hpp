@@ -2,9 +2,7 @@
 #include "common.hpp"
 #include "Iterator.hpp"
 #include "String.hpp"
-namespace ph
-{
-    inline namespace concepts {
+namespace ph::concepts {
 template <typename T, typename... U>
 concept Range = requires (T& t)
 {
@@ -19,4 +17,4 @@ concept Range = requires (T& t)
     {*std::end (t)} -> convertible_to <std::tuple_element_t <0, std::tuple <U...>>>;
 } or String <T>;
 }
-}
+

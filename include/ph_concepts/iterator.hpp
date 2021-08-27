@@ -8,9 +8,7 @@
 
 #define fwd(x) std::forward <decltype (x)> (x)
 
-namespace ph
-{
-    inline namespace concepts
+namespace ph::concepts
     {
         template <typename T>
         concept Iterator = Pointer <T> or requires (T& a, T& b)
@@ -88,7 +86,7 @@ namespace ph
         };
         
         
-        constexpr auto begin (auto&& x) noexcept (x.begin ()) -> Iterator auto
+        constexpr auto begin (auto&& x) -> Iterator auto
         requires requires {
             {x.begin ()} noexcept -> Iterator;
         }
@@ -97,7 +95,7 @@ namespace ph
         }
         
         
-        constexpr auto end (auto&& x) noexcept (x.end ()) -> Iterator auto
+        constexpr auto end (auto&& x) -> Iterator auto
         requires requires ()
         {
             {x.end ()} -> Iterator;
@@ -113,7 +111,7 @@ namespace ph
             return p + std::strlen (p);
         }
     }
-}
+
 
 
 #undef fwd

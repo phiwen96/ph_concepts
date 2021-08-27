@@ -18,12 +18,12 @@ union uni
     }
     
     
-    constexpr uni (auto&& e) noexcept
-    requires (... or std::is_constructible_v <U, decltype (e)>)
-    : rest {std::forward <decltype (e)> (e)}
-    {
-
-    }
+//    constexpr uni (auto&& e) noexcept
+//    requires (... or std::is_constructible_v <U, decltype (e)>)
+//    : rest {std::forward <decltype (e)> (e)}
+//    {
+//
+//    }
     
     constexpr uni () noexcept
     requires (std::is_trivially_default_constructible_v<T>)

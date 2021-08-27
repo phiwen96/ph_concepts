@@ -1,6 +1,4 @@
-//#include "testlib.hpp"
-#define RUN_CATCH
-#ifdef RUN_CATCH
+
 
 //#include "test.hpp"
 #include <catch2/catch.hpp>
@@ -21,4 +19,3 @@ TEST_CASE ("")
 }
 
 
-#endif

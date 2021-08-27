@@ -3,7 +3,7 @@
 
 SCENARIO ("String")
 {
-    GIVEN ()
+    GIVEN ("")
     {
         
     }

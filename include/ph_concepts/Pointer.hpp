@@ -1,9 +1,7 @@
 #pragma once
 
-namespace ph
-{
-    inline namespace concepts {
+namespace ph::concepts {
 template <typename T>
 concept Pointer = std::is_pointer_v <T>;
 }
-}
+

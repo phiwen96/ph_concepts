@@ -1,6 +1,9 @@
 #include "Range.hpp"
 
-static_assert (ph::Range <std::string>, "");
-
-static_assert (ph::Range <char const*>, "");
-
+namespace ph::concepts
+{
+    static_assert (Range <std::string>, "");
+    
+    static_assert (Range <char const*>, "");
+    
+}

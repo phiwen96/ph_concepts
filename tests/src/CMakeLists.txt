@@ -18,7 +18,7 @@ file(GLOB SOURCE_LIST *.cpp)
 
 # set (deps )
 macro (ph_add_test name)
-	add_executable (test_${name} testlib.cpp test_${name}.cpp ${HEADER_LIST})
+	add_executable (test_${name} ${SOURCE_LIST} ${HEADER_LIST})
 	# set_target_properties(test_${name}          PROPERTIES FOLDER "main/${PROJECT_NAME}/tests")
 	# source_group (bajs//kiss test_${name}.cpp)
 	source_group(TREE ${CMAKE_CURRENT_LIST_DIR}

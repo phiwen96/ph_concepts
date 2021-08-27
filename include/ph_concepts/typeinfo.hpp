@@ -45,13 +45,13 @@ namespace ph::typeinfo
 //    template <ph::Range R>
     namespace range
     {
-        template <ph::Range R>
-        using iterator_type = decltype (ph::begin (declval (R)));
+        template <ph::concepts::Range R>
+        using iterator_type = decltype (ph::concepts::begin (declval (R)));
         
-        template <ph::Range R>
-        using access_type = decltype (*ph::begin (declval (R)));
+        template <ph::concepts::Range R>
+        using access_type = decltype (*ph::concepts::begin (declval (R)));
         
-        template <ph::Range R>
+        template <ph::concepts::Range R>
         using element_type = decay (access_type <R>);
     };
     

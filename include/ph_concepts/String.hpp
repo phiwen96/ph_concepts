@@ -62,20 +62,18 @@ namespace
 
 
 
-namespace ph
-{
-    inline namespace concepts
+namespace ph::concepts
     {
         template <typename T>
         concept String = /*Range <char>*/type_of_string <T>::value or requires (T& A, T& B, int i)
         {
             {A [i]} -> ph::concepts::convertible_to <char&>;
             //    {B [i]} -> convertible_to <char>;
-            {A.size ()} -> ph::convertible_to <std::size_t>;
+            {A.size ()} -> convertible_to <std::size_t>;
             true;
         };
     }
-}
+
 
 
 #undef cexpr

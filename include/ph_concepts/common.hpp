@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
-namespace ph
-{
-    inline namespace concepts {
+namespace ph::concepts {
 #define EAT(...)
     
     
@@ -51,7 +49,7 @@ namespace ph
     
 }
 
-}
+
 
 
 

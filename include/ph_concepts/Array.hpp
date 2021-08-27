@@ -4,9 +4,7 @@
 
 #define cexpr inline static constexpr
 
-namespace ph
-{
-    inline namespace concepts{
+namespace ph::concepts{
 template <typename T>
 struct type_of_array
 {
@@ -88,4 +86,4 @@ struct type_of_array <std::vector <T>>// partial specialization for pointers
 template <typename T>
 concept Array = type_of_array <T>::value;
 }
-}
+

@@ -1,9 +1,7 @@
 #pragma once
 
 #define SAME_AS(type) std::is_same_v <type, std::decay_t <T>>
-namespace ph
-{
-    inline namespace concepts {
+namespace ph::concepts {
 template <typename T>
 concept Integer = SAME_AS (short)
     or SAME_AS (short int)
@@ -29,5 +27,5 @@ concept Integer = SAME_AS (short)
     or SAME_AS (unsigned long long)
     or SAME_AS (unsigned long long int);
 }
-}
+
 #undef SAME_AS
