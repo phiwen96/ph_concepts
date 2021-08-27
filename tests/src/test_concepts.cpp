@@ -16,13 +16,7 @@ concept Symbol = requires ()
     true;
 };
 
-template <typename T, typename U>
-concept Stack = requires (T& t, U& u)
-{
-    {t.push (u)} -> same_as <void>;
-    {t.pop ()} -> same_as <U&&>;
-    {t.top ()} -> same_as <U&>;
-};
+
 
 
 
