@@ -732,7 +732,7 @@ namespace ph::operators::bitwise {
 
 constexpr long double operator"" _deg_to_rad ( long double deg )
 {
-    long double radians = deg * std::numbers::pi_v<long double> / 180;
+    long double radians; // = deg * std::numbers::pi_v<long double> / 180;
     return radians;
 }
 
