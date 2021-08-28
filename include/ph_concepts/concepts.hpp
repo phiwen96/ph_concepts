@@ -24,6 +24,7 @@
 #include "Array.hpp"
 #include "String.hpp"
 #include "Size.hpp"
+#include "StringHelper.hpp"
 
 #include "common.hpp"
 
