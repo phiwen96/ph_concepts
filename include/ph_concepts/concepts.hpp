@@ -27,12 +27,19 @@
 //#include "StringHelper.hpp"
 
 
-#include "common.hpp"
+
 
 
 namespace ph::concepts {
+    
+    template <typename T, typename U>
+    concept convertible_to = std::is_convertible_v <T, U>;
+    
+    template <typename T, typename U>
+    concept same_as = std::is_same_v <T, U>;
         
 #define SAME_AS(type) std::is_same_v <type, std::decay_t <T>>
+#define cexpr inline static constexpr
     
     
     template <typename T>
@@ -261,7 +268,7 @@ concept Unsigned = SAME_AS (unsigned short)
     template <typename T>
     concept String = /*Range <char>*/StringHelper <T>::is_string or requires (T& A, T& B, int i)
     {
-        {A [i]} -> ph::concepts::convertible_to <char&>;
+        {A [i]} -> convertible_to <char&>;
         //    {B [i]} -> convertible_to <char>;
         {A.size ()} -> convertible_to <std::size_t>;
         true;
