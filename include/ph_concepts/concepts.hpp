@@ -23,6 +23,7 @@
 #include "Reference.hpp"
 #include "Array.hpp"
 #include "String.hpp"
+#include "Size.hpp"
 
 #include "common.hpp"
 
