@@ -3,6 +3,7 @@
     //#include <unordered_map>
     //#include "common.hpp"
     //using namespace std;
+	#include <iostream>
 
 //#include "Arithmetic.hpp"
 //#include "Bool.hpp"

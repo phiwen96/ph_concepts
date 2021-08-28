@@ -61,7 +61,7 @@ target_compile_definitions (ph_concepts
 set_target_properties (ph_concepts PROPERTIES CXX_STANDARD 20)
 target_compile_features (ph_concepts PUBLIC cxx_std_20)
 
-ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch})
+# ph_precompile (TARGET ph_concepts PRIVATE PCH ${std_pch})
 
 # add_library (ph_concepts ALIAS ph_concepts::ph_concepts)
 # target_link_libraries (lib PRIVATE    ${Vulkan_LIBRARIES} glfw)
