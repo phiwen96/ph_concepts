@@ -22,6 +22,7 @@
 #include "Function.hpp"
 #include "Reference.hpp"
 #include "Array.hpp"
+#include "String.hpp"
 
 #include "common.hpp"
 
