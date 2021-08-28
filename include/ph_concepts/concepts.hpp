@@ -4,27 +4,27 @@
     //#include "common.hpp"
     //using namespace std;
 
-#include "Arithmetic.hpp"
-#include "Bool.hpp"
-#include "Char.hpp"
-#include "Floating.hpp"
-#include "Fundamental.hpp"
-#include "Iterator.hpp"
-#include "Integer.hpp"
-#include "Integral.hpp"
-#include "Number.hpp"
-#include "Range.hpp"
-#include "Signed.hpp"
-#include "Unsigned.hpp"
-#include "Void.hpp"
-#include "Pointer.hpp"
-#include "Size.hpp"
-#include "Function.hpp"
-#include "Reference.hpp"
-#include "Array.hpp"
-#include "String.hpp"
-#include "Size.hpp"
-#include "StringHelper.hpp"
+//#include "Arithmetic.hpp"
+//#include "Bool.hpp"
+//#include "Char.hpp"
+//#include "Floating.hpp"
+//#include "Fundamental.hpp"
+//#include "Iterator.hpp"
+//#include "Integer.hpp"
+//#include "Integral.hpp"
+//#include "Number.hpp"
+//#include "Range.hpp"
+//#include "Signed.hpp"
+//#include "Unsigned.hpp"
+//#include "Void.hpp"
+//#include "Pointer.hpp"
+//#include "Size.hpp"
+//#include "Function.hpp"
+//#include "Reference.hpp"
+//#include "Array.hpp"
+//#include "String.hpp"
+//#include "Size.hpp"
+//#include "StringHelper.hpp"
 
 
 #include "common.hpp"
@@ -32,18 +32,312 @@
 
 namespace ph::concepts {
         
+#define SAME_AS(type) std::is_same_v <type, std::decay_t <T>>
+    
+    
+    template <typename T>
+    concept Bool = SAME_AS (bool);
+        
+        
+    template <typename T>
+    concept Char =
+    SAME_AS (char)
+    or SAME_AS (signed char)
+    or SAME_AS (unsigned char)
+    or SAME_AS (char16_t)
+    or SAME_AS (char32_t)
+    or SAME_AS (wchar_t);
+    
+    template <typename T>
+    concept Pointer = std::is_pointer_v <T>;
+    
+    template <typename T>
+    concept Floating = SAME_AS (float) or SAME_AS (double) or SAME_AS (long double);
+
+	template <typename T>
+concept Signed = SAME_AS (short)
+    or SAME_AS (short int)
+    or SAME_AS (signed short)
+    or SAME_AS (signed short int)
+    or SAME_AS (int)
+    or SAME_AS (signed)
+    or SAME_AS (signed int)
+    or SAME_AS (long)
+    or SAME_AS (long int)
+    or SAME_AS (signed long)
+    or SAME_AS (signed long int)
+    or SAME_AS (long long)
+    or SAME_AS (long long int)
+    or SAME_AS (signed long long)
+    or SAME_AS (signed long long int);
+
+
+template <typename T>
+concept Unsigned = SAME_AS (unsigned short)
+    or SAME_AS (unsigned short int)
+    or SAME_AS (unsigned)
+    or SAME_AS (unsigned int)
+    or SAME_AS (unsigned long)
+    or SAME_AS (unsigned long int)
+    or SAME_AS (unsigned long long)
+    or SAME_AS (unsigned long long int);
+
+    template <typename T>
+    concept Function = std::is_function_v <std::decay_t <T>>;
+        
+    template <typename T>
+    concept Void = std::is_same_v <void, T>;
+    
+    template <typename T>
+    concept Integer = SAME_AS (short)
+        or SAME_AS (short int)
+        or SAME_AS (signed short)
+        or SAME_AS (signed short int)
+        or SAME_AS (int)
+        or SAME_AS (signed)
+        or SAME_AS (signed int)
+        or SAME_AS (long)
+        or SAME_AS (long int)
+        or SAME_AS (signed long)
+        or SAME_AS (signed long int)
+        or SAME_AS (long long)
+        or SAME_AS (long long int)
+        or SAME_AS (signed long long)
+        or SAME_AS (signed long long int)
+        or SAME_AS (unsigned short)
+        or SAME_AS (unsigned short int)
+        or SAME_AS (unsigned)
+        or SAME_AS (unsigned int)
+        or SAME_AS (unsigned long)
+        or SAME_AS (unsigned long int)
+        or SAME_AS (unsigned long long)
+        or SAME_AS (unsigned long long int);
+    
+    template <typename T>
+    concept Arithmetic = Floating <T>
+        or Integer <T>
+        or Char <T>;
+        
+    template <typename T>
+    concept Fundamental = Void <T>
+        or Arithmetic <T>
+        or Bool <T>
+        or std::is_same_v <std::nullptr_t, T>;
+    
+    template <typename T>
+    concept Integral = Bool <T> or Char <T> or Integer <T>;
+    
+    template <typename T>
+    concept Iterator = Pointer <T> or requires (T& a, T& b)
+    {
+        T {a};
+        a = b;
+        a++;
+        ++a;
+        a == b;
+        a != b;
+        *a;
+    };
+    
+    
+    
+    
+    template <typename T>
+    concept Input_iterator = Iterator <T> and requires (T& t1, T& t2)
+    {
+        /// Supports read only and step forward (once)
+        {*t1};
+        ++t1;
+        t1++;
+        //        t1 == t2;
+        //        t1 != t2;
+        //        *t1;
+    };
+    
+    
+    template <typename T>
+    concept Output_iterator = Input_iterator <T> and requires (T& t1, T& t2)
+    {
+        /// Supports write only and step forward (once)
+        *t1 = *t2;
+        ++t1;
+        t1++;
+    };
+    
+    template <typename T>
+    concept Forward_iterator = Output_iterator <T> and requires (T& a, T& b)
+    {
+        /// Supports read and write and step forward
+        true;
+    };
+    
+    template <typename T>
+    concept Bidirectional_iterator = Forward_iterator <T> and requires (T& a, T& b)
+    {
+        /// Supports read, write, step forward, and step backward.
+        --a;
+        a--;
+    };
+    
+    
+    template <typename T>
+    concept Size = std::is_convertible_v <std::decay_t <T>, std::size_t>;
+    
+    template <typename T>
+    concept Reference = std::is_reference_v <T>;
+    
+    template <typename>
+    struct StringHelper
+    {
+        cexpr bool is_string = false;
+        cexpr bool known_bounds = false;
+        cexpr bool dynamic = false;
+    };
+    
+    template <Char T, Size auto n>
+    struct StringHelper <T [n]>// partial specialization for arrays of known bounds
+    {
+        cexpr bool is_string = true;
+        cexpr bool known_bounds = true;
+        cexpr bool dynamic = false;
+        
+        static inline constexpr auto size () noexcept -> Size auto
+        {
+            return n;
+        }
+    };
+    
+    template <Char T, Size auto n>
+    struct StringHelper <T (&) [n]>// partial spec. for references to arrays of known bounds
+    {
+        cexpr bool is_string = true;
+        cexpr bool known_bounds = true;
+        cexpr bool dynamic ()
+        {
+            return false;
+        }
+        
+        static inline constexpr auto size () noexcept -> Size auto
+        {
+            return n;
+        }
+        
+    };
+    
+    template <Char T>
+    struct StringHelper <T (&) []> // partial spec. for references to arrays of unknown bounds
+    {
+        cexpr bool is_string = true;
+        cexpr bool known_bounds = false;
+        cexpr bool dynamic = true;
+    };
+    
+    template <Char T>
+    struct StringHelper <T*> // partial specialization for pointers
+    {
+        cexpr bool is_string = true;
+        cexpr bool known_bounds = false;
+        cexpr bool dynamic = true;
+        
+        static inline constexpr auto size (T* t) noexcept -> Size auto
+        {
+            return strlen (t);
+        }
+    };
+    
+    template <>
+    struct StringHelper <std::string> // partial specialization for pointers
+    {
+        cexpr bool is_string = true;
+        cexpr bool known_bounds = true;
+        cexpr bool dynamic = true;
+        
+        static inline constexpr auto size (std::string& s) noexcept -> Size auto
+        {
+            return s.size ();
+        }
+    };
+    
+    template <typename T>
+    concept String = /*Range <char>*/StringHelper <T>::is_string or requires (T& A, T& B, int i)
+    {
+        {A [i]} -> ph::concepts::convertible_to <char&>;
+        //    {B [i]} -> convertible_to <char>;
+        {A.size ()} -> convertible_to <std::size_t>;
+        true;
+    };
+    
+    
+    template <typename T>
+    concept Random_access_iterator = Bidirectional_iterator <T> and requires (T& a, T& b, size_t& i)
+    {
+        /// : Supports read, write, step forward, step backward, and jump to an arbitrary position in constant time
+        {a [i]} -> Reference;
+    };
+    
+    template <typename T>
+    concept Contiguous_iterator = Random_access_iterator <T> and requires (T& a, T& b, size_t& i)
+    {
+        /// The same as random access iterators, but also guarantees that the underlying data is a contiguous block of memory, such as std::string, std::vector, std::array, std::span, and the (rarely used) std::valarray.
+        true;
+    };
+    
+    
+    
+    constexpr auto begin (Pointer auto p) noexcept (true) -> Iterator auto
+    {
+        return fwd (p);
+    };
+    
+    
+    constexpr auto begin (auto&& x) -> Iterator auto
+    requires requires {
+        {x.begin ()} noexcept -> Iterator;
+    }
+    {
+        return x.begin ();
+    }
+    
+    
+    constexpr auto end (auto&& x) -> Iterator auto
+    requires requires ()
+    {
+        {x.end ()} -> Iterator;
+    }
+    {
+        return x.end ();
+    }
+    
+    const wchar_t* str = L"爆ぜろリアル！弾けろシナプス！パニッシュメントディス、ワールド！";
+    
+    constexpr auto end (Char auto* p) noexcept -> Iterator auto
+    {
+        return p + std::strlen (p);
+    }
+    
+    template <typename T, typename... U>
+    concept Range = requires (T& t)
+    {
+        requires (sizeof... (U) == 0);
+        {std::end (t)} -> Iterator;
+        {std::begin (t)} -> Iterator;
+        
+    } or requires (T& t)
+    {
+        requires (sizeof... (U) == 1);
+        {*std::begin (t)} -> convertible_to <std::tuple_element_t <0, std::tuple <U...>>>;
+        {*std::end (t)} -> convertible_to <std::tuple_element_t <0, std::tuple <U...>>>;
+    } or String <T>;
+        
+    
+    static_assert (Range <std::string>, "");
+    
+    static_assert (Range <char const*>, "");
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    template <typename T>
+    concept Number = Integer <T> or Floating <T>;
         
         
         
@@ -425,3 +719,80 @@ namespace ph::operators::bitwise {
 
 
 
+
+
+
+constexpr long double operator"" _deg_to_rad ( long double deg )
+{
+    long double radians = deg * std::numbers::pi_v<long double> / 180;
+    return radians;
+}
+
+
+
+
+
+template <typename T, typename... U>
+union uni
+{
+    T t;
+    uni <U...> rest;
+    
+    constexpr uni (auto&& e) noexcept
+    requires requires () {T {forward (e)};}
+    : t {forward (e)}
+    {
+        
+    }
+    
+    
+//    constexpr uni (auto&& e) noexcept
+//    requires (... or std::is_constructible_v <U, decltype (e)>)
+//    : rest {std::forward <decltype (e)> (e)}
+//    {
+//
+//    }
+    
+    constexpr uni () noexcept
+    requires (std::is_trivially_default_constructible_v<T>)
+    = default;
+    
+    
+    constexpr uni () noexcept
+    requires (not std::is_trivially_default_constructible_v<T>)
+    : t {}
+    {
+        
+    }
+    
+    ~uni () noexcept
+    requires (not std::is_trivially_destructible_v<T>)
+    {
+        
+    }
+
+};
+
+template <typename T>
+union uni <T>
+{
+    T t;
+    
+    constexpr uni (auto&& e) requires requires () {T {forward (e)};}
+    {
+        
+    }
+    
+    constexpr uni () requires (std::is_trivially_default_constructible_v<T>) = default;
+    
+    
+    constexpr uni () requires (not std::is_trivially_default_constructible_v<T>)
+    {
+        
+    }
+    
+    ~uni () requires (not std::is_trivially_destructible_v<T>)
+    {
+        
+    }
+};
