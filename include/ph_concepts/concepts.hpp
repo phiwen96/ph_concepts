@@ -4,6 +4,7 @@
     //#include "common.hpp"
     //using namespace std;
 	#include <iostream>
+#include <utility>
 
 //#include "Arithmetic.hpp"
 //#include "Bool.hpp"
@@ -33,6 +34,94 @@
 
 namespace ph::concepts {
     
+    using std::swap;
+    
+    template <typename T>
+    concept Swappable = requires (T& a, T& b)
+    {
+        swap (a, b);
+    };
+    
+    template <typename T>
+    concept DefaultConstructible = std::is_default_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept MoveConstructible = std::is_move_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept CopyConstructible = std::is_copy_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept MoveAssignable = std::is_move_assignable_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept CopyAssignable = std::is_copy_assignable_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept Destructible = std::is_destructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    
+    
+    
+    
+    template <typename T>
+    concept TriviallyDefaultConstructible = std::is_trivially_default_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept TriviallyMoveConstructible = std::is_trivially_move_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept TriviallyCopyConstructible = std::is_trivially_copy_constructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept TriviallyMoveAssignable = std::is_trivially_move_assignable_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept TriviallyCopyAssignable = std::is_trivially_copy_assignable_v <T> and requires ()
+    {
+        true;
+    };
+    
+    template <typename T>
+    concept TriviallyDestructible = std::is_trivially_destructible_v <T> and requires ()
+    {
+        true;
+    };
+    
+    
+    
+    
+    
     template <typename T, typename U>
     concept convertible_to = std::is_convertible_v <T, U>;
     
@@ -41,6 +130,8 @@ namespace ph::concepts {
         
 #define SAME_AS(type) std::is_same_v <type, std::decay_t <T>>
 #define cexpr inline static constexpr
+    
+    
     
     
     template <typename T>
@@ -194,6 +285,31 @@ concept Unsigned = SAME_AS (unsigned short)
     template <typename T>
     concept Reference = std::is_reference_v <T>;
     
+    
+    template <typename T>
+    concept Comparable = requires (T& a, T& b)
+    {
+        {a == b} -> Bool;
+        {a != b} -> Bool;
+    };
+    
+    template <typename T>
+    concept Container =
+        DefaultConstructible <T> and
+        MoveConstructible <T> and
+        Destructible <T> and
+        Swappable <T> and
+        Comparable <T> and
+    
+    requires (T& t)
+    {
+        {t [0]} -> Reference;
+    };
+    
+    
+    
+    
+    
     template <typename>
     struct StringHelper
     {
@@ -267,13 +383,14 @@ concept Unsigned = SAME_AS (unsigned short)
     };
     
     template <typename T>
-    concept String = /*Range <char>*/StringHelper <T>::is_string or requires (T& A, T& B, int i)
+    concept String = requires (T& A, T& B, int i)
     {
-        {A [i]} -> convertible_to <char&>;
-        //    {B [i]} -> convertible_to <char>;
-        {A.size ()} -> convertible_to <std::size_t>;
-        true;
+        {A [0]} -> Reference;
+        {A [0]} -> Char;
+        StringHelper <T>::size ();
     };
+    
+        
     
     
     template <typename T>
@@ -340,7 +457,7 @@ concept Unsigned = SAME_AS (unsigned short)
     
     static_assert (Range <std::string>, "");
     
-    static_assert (Range <char const*>, "");
+//    static_assert (Range <char const*>, "");
         
         
         
@@ -531,8 +648,7 @@ concept Unsigned = SAME_AS (unsigned short)
         
         
         
-        template <typename T>
-        concept Destructible = std::is_destructible_v <T>;
+
         
         template <typename T>
         concept Incrementable = requires (T& t)
