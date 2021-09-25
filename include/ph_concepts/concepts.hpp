@@ -1,38 +1,23 @@
 #pragma once
-    //#include <map>
-    //#include <unordered_map>
-    //#include "common.hpp"
-    //using namespace std;
+
 	#include <iostream>
 #include <utility>
 
-//#include "Arithmetic.hpp"
-//#include "Bool.hpp"
-//#include "Char.hpp"
-//#include "Floating.hpp"
-//#include "Fundamental.hpp"
-//#include "Iterator.hpp"
-//#include "Integer.hpp"
-//#include "Integral.hpp"
-//#include "Number.hpp"
-//#include "Range.hpp"
-//#include "Signed.hpp"
-//#include "Unsigned.hpp"
-//#include "Void.hpp"
-//#include "Pointer.hpp"
-//#include "Size.hpp"
-//#include "Function.hpp"
-//#include "Reference.hpp"
-//#include "Array.hpp"
-//#include "String.hpp"
-//#include "Size.hpp"
-//#include "StringHelper.hpp"
+template <typename... T>
+struct Lambdas : T...
+{
+    constexpr Lambdas (T&&... t) noexcept : T {t}...
+    {
+        
+    }
+};
 
 
 
 
 
-namespace ph::concepts {
+
+namespace ph {
     
     using std::swap;
     
@@ -308,87 +293,84 @@ concept Unsigned = SAME_AS (unsigned short)
     
     
     
+ 
     
     
-    template <typename>
-    struct StringHelper
+    
+    namespace string
     {
-        cexpr bool is_string = false;
-        cexpr bool known_bounds = false;
-        cexpr bool dynamic = false;
-    };
-    
-    template <Char T, Size auto n>
-    struct StringHelper <T [n]>// partial specialization for arrays of known bounds
-    {
-        cexpr bool is_string = true;
-        cexpr bool known_bounds = true;
-        cexpr bool dynamic = false;
-        
-        static inline constexpr auto size () noexcept -> Size auto
+        auto size = Lambdas
         {
-            return n;
-        }
+            [] (auto&& t) noexcept -> Size auto
+            requires convertible_to <decltype (t), char const*>
+            {
+                return strlen (t);
+            },
+            
+            [] (auto&& t) constexpr noexcept -> Size auto
+            requires convertible_to <decltype (t), std::string>
+            {
+                return t.size ();
+            },
+            
+            
+            [] <Char T, Size auto n> (T [n]) constexpr noexcept -> Size auto
+            {
+                return n;
+            },
+            
+            [] <Char T, Size auto n> (T (&) [n]) constexpr noexcept -> Size auto
+            {
+                return n;
+            },
+            
+            [] <Char T, Size auto n> (T (&t) []) constexpr noexcept -> Size auto
+            {
+                strlen (t);
+            },
+            
+            [] <Char T, Size auto n> (T* t) constexpr noexcept -> Size auto
+            {
+                strlen (t);
+            }
+        };
+
+        auto c_str = Lambdas
+        {
+            [] (auto&& t) constexpr noexcept -> char const*
+            requires requires ()
+            {
+                (char const*) t;
+            }
+            {
+                return t;
+            },
+            
+            [] (auto&& t) constexpr noexcept -> char const*
+            requires requires ()
+            {
+                {t.size ()} -> convertible_to <char const*>;
+            }
+            {
+                return t.size ();
+            }
+        };
     };
     
-    template <Char T, Size auto n>
-    struct StringHelper <T (&) [n]>// partial spec. for references to arrays of known bounds
-    {
-        cexpr bool is_string = true;
-        cexpr bool known_bounds = true;
-        cexpr bool dynamic ()
-        {
-            return false;
-        }
-        
-        static inline constexpr auto size () noexcept -> Size auto
-        {
-            return n;
-        }
-        
-    };
     
-    template <Char T>
-    struct StringHelper <T (&) []> // partial spec. for references to arrays of unknown bounds
-    {
-        cexpr bool is_string = true;
-        cexpr bool known_bounds = false;
-        cexpr bool dynamic = true;
-    };
-    
-    template <Char T>
-    struct StringHelper <T*> // partial specialization for pointers
-    {
-        cexpr bool is_string = true;
-        cexpr bool known_bounds = false;
-        cexpr bool dynamic = true;
-        
-        static inline constexpr auto size (T* t) noexcept -> Size auto
-        {
-            return strlen (t);
-        }
-    };
-    
-    template <>
-    struct StringHelper <std::string> // partial specialization for pointers
-    {
-        cexpr bool is_string = true;
-        cexpr bool known_bounds = true;
-        cexpr bool dynamic = true;
-        
-        static inline constexpr auto size (std::string& s) noexcept -> Size auto
-        {
-            return s.size ();
-        }
-    };
     
     template <typename T>
     concept String = requires (T& A, T& B, int i)
     {
         {A [0]} -> Reference;
         {A [0]} -> Char;
-        StringHelper <T>::size ();
+        string::size (A);
+        string::c_str (A);
+//        StringHelper <T>::size (A);
+//        StringHelper <T>::c_str (A);
     };
+    
+    
     
         
     
@@ -497,7 +479,7 @@ concept Unsigned = SAME_AS (unsigned short)
         
         auto len (Range auto const& r) -> Size auto
         {
-            return static_cast <size_t> (ph::concepts::end (r) - ph::concepts::begin (r));
+            return static_cast <size_t> (ph::end (r) - ph::begin (r));
         }
         
     //    constexpr auto len (auto&&... a) -> Size auto
