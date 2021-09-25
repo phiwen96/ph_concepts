@@ -29,5 +29,5 @@ TEST_CASE ()
     
     
     
-    cout << size ("hej") << endl;
+    cout << ph::size ("hej") << endl;
 }

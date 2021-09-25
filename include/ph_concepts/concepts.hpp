@@ -291,14 +291,15 @@ concept Unsigned = SAME_AS (unsigned short)
         {t [0]} -> Reference;
     };
     
-    
+
+
+
     
  
     
     
     
-    namespace string
-    {
+    
         auto size = Lambdas
         {
             [] (auto&& t) noexcept -> Size auto
@@ -355,7 +356,7 @@ concept Unsigned = SAME_AS (unsigned short)
                 return t.size ();
             }
         };
-    };
+    
     
     
     
@@ -364,10 +365,8 @@ concept Unsigned = SAME_AS (unsigned short)
     {
         {A [0]} -> Reference;
         {A [0]} -> Char;
-        string::size (A);
-        string::c_str (A);
-//        StringHelper <T>::size (A);
-//        StringHelper <T>::c_str (A);
+        size (A);
+        c_str (A);
     };
     
     
