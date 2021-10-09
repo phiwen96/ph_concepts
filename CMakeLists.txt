@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.18.4)
+cmake_minimum_required (VERSION 3.14.2)
 
 file (TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
 if (EXISTS "${LOC_PATH}")
