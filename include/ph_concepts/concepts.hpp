@@ -345,6 +345,38 @@ namespace ph::string
                 strlen (t);
             }
         };
+    
+    auto data = Lambdas
+    {
+        [] (char const* t) noexcept -> Pointer auto
+        {
+            return (char*) t;
+        },
+        
+        [] (auto&& t) constexpr noexcept -> Pointer auto
+        requires requires (){
+            {t.data ()} -> Pointer;
+        }
+        {
+            return t.data ();
+        },
+        
+        
+        [] <Char T, Size auto n> (T (t)[n]) constexpr noexcept -> Pointer auto
+        {
+            return t;
+        },
+        
+        [] <Char T, Size auto n> (T (&t) [n]) constexpr noexcept -> Pointer auto
+        {
+            return t;
+        },
+        
+        [] <Char T, Size auto n> (T (&t) []) constexpr noexcept -> Pointer auto
+        {
+            return t;
+        }
+    };
 
         auto c_str = Lambdas
         {
