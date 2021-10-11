@@ -50,5 +50,5 @@ TEST_CASE ()
     
     
     
-    cout << ph::concepts::size ("hej") << endl;
+    cout << ph::string::size ("hej") << endl;
 }

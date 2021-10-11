@@ -297,16 +297,20 @@ concept Unsigned = SAME_AS (unsigned short)
     
 
 
+}
 
+namespace ph::string
+{
     
  
     
     
     
+    using namespace ph::concepts;
     
         auto size = Lambdas
         {
-            [] (auto&& t) noexcept -> Size auto
+            [] (auto&& t) noexcept -> ph::concepts::Size auto
             requires convertible_to <decltype (t), char const*>
             {
                 return strlen (t);
@@ -361,11 +365,14 @@ concept Unsigned = SAME_AS (unsigned short)
             }
         };
     
+}
+    
 //    template <char... s>
     
     
     
-    
+namespace ph::concepts
+{
     
     
     template <typename T>
@@ -373,8 +380,8 @@ concept Unsigned = SAME_AS (unsigned short)
     {
         {A [0]} -> Reference;
         {A [0]} -> Char;
-        size (A);
-        c_str (A);
+        ph::string::size (A);
+        ph::string::c_str (A);
 //        requires requires ()
 //        {
 //            A = B;
