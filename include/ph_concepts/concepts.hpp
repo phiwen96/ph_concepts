@@ -317,7 +317,9 @@ namespace ph::string
             },
             
             [] (auto&& t) constexpr noexcept -> Size auto
-            requires convertible_to <decltype (t), std::string>
+            requires requires (){
+                {t.size ()} -> Size;
+            }
             {
                 return t.size ();
             },
