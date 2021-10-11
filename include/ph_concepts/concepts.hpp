@@ -474,7 +474,7 @@ namespace ph::concepts
     
     constexpr auto end (Char auto* p) noexcept -> Iterator auto
     {
-        return p + std::strlen (p);
+        return p + strlen (p);
     }
     
     template <typename T, typename... U>
