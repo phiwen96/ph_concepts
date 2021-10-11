@@ -2,21 +2,42 @@
 #include <ph_concepts/concepts.hpp>
 using namespace std;
 using std::cout, std::endl;
-using namespace ph;
+using namespace ph::concepts;
 
-template <typename T>
-concept Kuk = SAME_AS(std::string) or SAME_AS(int) or SAME_AS(char const*) or SAME_AS(T&);
-
-
-template <typename T, typename U>
-concept TA = true;//same_as<T, int>;
-
-struct A
+struct const_str
 {
-    operator char const* (){
-        return "j";
-    }
+    
 };
+
+
+constexpr const_str operator"" _str (char const*, size_t)
+{
+    return {};
+}
+
+TEST_CASE()
+{
+    constexpr auto s = "hem"_str;
+}
+
+TEST_CASE ("Char")
+{
+    Char auto c0 = char {'h'};
+    Char auto c1 = 'h';
+    
+    REQUIRE (not Char <int>);
+}
+
+TEST_CASE ("String")
+{
+    String auto s0 = std::string {"hej"};
+    String auto s1 = "hej";
+
+}
+
+
+
+
 
 
 
@@ -29,5 +50,5 @@ TEST_CASE ()
     
     
     
-    cout << ph::size ("hej") << endl;
+    cout << ph::concepts::size ("hej") << endl;
 }

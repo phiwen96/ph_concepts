@@ -17,7 +17,7 @@ struct Lambdas : T...
 
 
 
-namespace ph {
+namespace ph::concepts {
     
     using std::swap;
     
@@ -108,14 +108,18 @@ namespace ph {
     
     
     template <typename T, typename U>
-    concept convertible_to = std::is_convertible_v <T, U>;
+    concept convertible_to = requires (T& t)
+    {
+        (U) t;
+    };
     
     template <typename T, typename U>
     concept same_as = std::is_same_v <T, U>;
         
 #define SAME_AS(type) std::is_same_v <type, std::decay_t <T>>
+#define CONVERTIBLE_2(type) convertible_to <type, std::decay_t <T>>
+
 #define cexpr inline static constexpr
-    
     
     
     
@@ -330,7 +334,7 @@ concept Unsigned = SAME_AS (unsigned short)
                 strlen (t);
             },
             
-            [] <Char T, Size auto n> (T* t) constexpr noexcept -> Size auto
+            [] <Char T> (T* t) constexpr noexcept -> Size auto
             {
                 strlen (t);
             }
@@ -350,23 +354,34 @@ concept Unsigned = SAME_AS (unsigned short)
             [] (auto&& t) constexpr noexcept -> char const*
             requires requires ()
             {
-                {t.size ()} -> convertible_to <char const*>;
+                {t.c_str ()} -> convertible_to <char const*>;
             }
             {
-                return t.size ();
+                return t.c_str ();
             }
         };
+    
+//    template <char... s>
+    
+    
     
     
     
     
     template <typename T>
-    concept String = requires (T& A, T& B, int i)
+    concept String = requires (T& A, T& B)
     {
         {A [0]} -> Reference;
         {A [0]} -> Char;
         size (A);
         c_str (A);
+//        requires requires ()
+//        {
+//            A = B;
+////            A += B;
+//            {A == B} -> Bool;
+//            {A != B} -> Bool;
+//        };
     };
     
     
@@ -478,7 +493,7 @@ concept Unsigned = SAME_AS (unsigned short)
         
         auto len (Range auto const& r) -> Size auto
         {
-            return static_cast <size_t> (ph::end (r) - ph::begin (r));
+            return static_cast <size_t> (ph::concepts::end (r) - ph::concepts::begin (r));
         }
         
     //    constexpr auto len (auto&&... a) -> Size auto
