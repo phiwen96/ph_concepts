@@ -1113,7 +1113,7 @@ namespace ph::collections
         
     };
     
-    void list(int* n)
+//    void list(int* n)
     
 //    template <typename T>
 //    struct bounds <T*>
@@ -1140,3 +1140,4 @@ namespace ph::collections
 //    };
 
 
+}
