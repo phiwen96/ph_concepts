@@ -19,6 +19,12 @@ struct Lambdas : T...
 
 namespace ph::concepts {
     
+//    template <typename T>
+//    concept Constexpr = requires (T& t)
+//    {
+//        requires (__builtin_choose_expr (t.size (), true, false));
+//    };
+    
     using std::swap;
     
     template <typename T>
@@ -123,9 +129,23 @@ namespace ph::concepts {
     
     
     
+    
+    
+    
+    
+    
+    
     template <typename T>
     concept Bool = SAME_AS (bool);
         
+    
+    
+    
+    
+    
+    
+    
+    
         
     template <typename T>
     concept Char =
@@ -136,14 +156,27 @@ namespace ph::concepts {
     or SAME_AS (char32_t)
     or SAME_AS (wchar_t);
     
+    
+    
+    
+    
+    
     template <typename T>
     concept Pointer = std::is_pointer_v <T>;
+    
+    
+    
+    
     
     template <typename T>
     concept Floating = SAME_AS (float) or SAME_AS (double) or SAME_AS (long double);
 
+    
+    
+    
+    
 	template <typename T>
-concept Signed = SAME_AS (short)
+    concept Signed = SAME_AS (short)
     or SAME_AS (short int)
     or SAME_AS (signed short)
     or SAME_AS (signed short int)
@@ -401,10 +434,11 @@ namespace ph::string
     
 }
     
-//    template <char... s>
     
-    
-    
+
+
+
+
 namespace ph::concepts
 {
     
@@ -957,3 +991,152 @@ union uni <T>
         
     }
 };
+
+
+
+
+    
+
+
+
+    
+    
+//    static_assert (Collection <int>, "");
+    
+    
+    
+    
+ 
+
+
+
+
+//template <typename T>
+//struct Type
+//{
+//    using value_type = T;
+//
+//
+//};
+
+//template <typename T>
+//constexpr auto type = Type <T> {};
+
+    
+//template <int>
+//auto allocate ();
+
+//template <0>
+//Pointer auto allocate ()
+
+auto sizeoof (auto... t)
+{
+    return sizeof... (t);
+}
+
+template <typename T>
+struct collection
+{
+    using type = T;
+//    cexpr bool dynamic = N == 0;
+    
+    collection (T t...) noexcept
+    {
+        
+        m_size = sizeoof (t);
+        std::cout << m_size << std::endl;
+//        m_begin = (type*) malloc (m_size * sizeof (T));
+    }
+    
+    
+    
+//    auto operator += (type&&) noexcept requires (dynamic)
+//    {
+//        return *this;
+//    }
+    
+private:
+    type* m_begin;
+    std::size_t m_size;
+};
+
+
+    
+namespace ph::collections
+{
+    using namespace ph::concepts;
+    
+    
+    
+
+    template <typename T>
+    concept Collection = same_as <T, int[]>;
+    
+    template <typename T>
+    struct bounds
+    {
+        int i = __builtin_choose_expr (2+3, 0, 1);
+        int k;
+        int j = true;
+    };
+    
+
+    
+    template <typename T, std::size_t N>
+    struct bounds <T [N]>
+    {
+        cexpr std::size_t value = N;
+    };
+    
+    template <typename T, std::size_t N>
+    struct bounds <T (&) [N]>
+    {
+        cexpr std::size_t value = N;
+    };
+    
+    template <typename T>
+    struct bounds <T []>
+    {
+        
+    };
+    
+    template <typename T>
+    struct bounds <T (&) []>
+    {
+
+    };
+    
+    template <typename T>
+    struct bounds <T*>
+    {
+        [[no_unique_address]] int i;
+        
+    };
+    
+    void list(int* n)
+    
+//    template <typename T>
+//    struct bounds <T*>
+//    {
+//
+//    };
+    
+    
+    
+    
+    
+
+//    template <typename T>
+//    concept Bounded = Collection <T> and requires (T t)
+//    {
+//        {t.size ()};
+//    };
+//
+//
+//    template <typename T>
+//    concept Numbers = Collection <T> and requires ()
+//    {
+//        true;
+//    };
+}
+
