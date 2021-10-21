@@ -21,6 +21,16 @@ file(GLOB SOURCE_LIST *.cpp)
 # set (deps )
 # macro (ph_add_test name)
 	add_executable (test_${CMAKE_PROJECT_NAME} ${SOURCE_LIST} ${HEADER_LIST})
+
+	# target_compile_options (test_${CMAKE_PROJECT_NAME} PUBLIC 
+	# -fmodules-ts
+	# #-fbuiltin-module-map 
+	# -fimplicit-module-maps 
+	# # -fprebuilt-implicit-modules
+	# )
+
+	# set (CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP true)
+
 	# set_target_properties(test_${CMAKE_PROJECT_NAME}          PROPERTIES FOLDER "main/${PROJECT_NAME}/tests")
 	# source_group (bajs//kiss test_${name}.cpp)
 	source_group(TREE ${CMAKE_CURRENT_LIST_DIR}
@@ -35,7 +45,7 @@ file(GLOB SOURCE_LIST *.cpp)
 	# set_target_properties(test_${name} PROPERTIES PROJECT_LABEL "test_${name}Foo Tastic")
 	target_link_libraries (test_${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_PROJECT_NAME} Catch2::Catch2)
 	target_include_directories (test_${CMAKE_PROJECT_NAME} PUBLIC ../include)
-	ph_precompile (TARGET test_${CMAKE_PROJECT_NAME} PUBLIC PCH ${std_pch})
+	# ph_precompile (TARGET test_${CMAKE_PROJECT_NAME} PUBLIC PCH ${std_pch})
 
 	if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	message("kuk")

@@ -1,7 +1,15 @@
 #pragma once
+//import std.core;
+//import std.string;
+//import std.iostream;
+//	#include <iostream>
+//import utility;
 
-	#include <iostream>
-#include <utility>
+import <iostream>;
+//#include <utility>
+#include <iostream>
+
+
 
 template <typename... T>
 struct Lambdas : T...

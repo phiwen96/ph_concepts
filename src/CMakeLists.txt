@@ -96,3 +96,11 @@ endif ()
 
 
 # IDE()
+
+# target_compile_options (ph_concepts PRIVATE -fmodules -stdlib=libc++ -fbuiltin-module-map -fimplicit-module-maps)
+target_compile_options (ph_concepts PUBLIC -std=c++2a -stdlib=libc++ -fimplicit-modules -fimplicit-module-maps)
+# add_compile_options(-fmodules)
+# add_compile_options(-stdlib=libc++)
+# add_compile_options(-fbuiltin-module-map)
+# add_compile_options(-fimplicit-module-maps)
+set (CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP true)
